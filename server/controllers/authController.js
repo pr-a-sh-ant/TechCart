@@ -49,27 +49,38 @@ exports.protect = async (req, res, next) => {
     res.status(401).send("Unauthorized: Missing or invalid token");
   }
   //2) Verification of token
-  const decoded = await promisify(jwt.verify)(
-    token,
-    process.env.JWT_SECRET_KEY_ACCESS_TOKEN
-  );
-
-  //3) Check if user is Admin
-  let currentUser;
-  userModel
-    .getUserById(decoded.userId)
-    .then((result) => {
-      console.log("result", result[0]);
-      if (!result[0].isAdmin) {
-        return next(new Error("You are not authorized to perform this action"));
-      } else {
+  try {
+    const decoded = await promisify(jwt.verify)(
+      token,
+      process.env.JWT_SECRET_KEY_ACCESS_TOKEN
+    );
+    //3) Check if user is Valid
+    let currentUser;
+    userModel
+      .getUserById(decoded.userId)
+      .then((result) => {
+        console.log("result", result[0]);
         const currentUser = result[0];
         req.user = currentUser;
         next();
-      }
-    })
-    .catch((err) => {
-      console.error(err.message);
-      res.status(500).send("Error fetching user.");
+      })
+      .catch((err) => {
+        console.error(err.message);
+        res.status(500).send({ status: 400, message: "Error fetching user." });
+      });
+  } catch (err) {
+    res.status(401).send("Unauthorized: Expired or invalid token");
+  }
+};
+
+exports.restrictTo = (req, res, next) => {
+  if (req.user.isAdmin) {
+    return next();
+  } else {
+    res.status(403).send({
+      statusId: 403,
+      status: "failed",
+      message: "Forbidden: You are not authorized to perform this action",
     });
+  }
 };
