@@ -3,13 +3,9 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
-const tokenController = require("../controllers/tokenController");
+const authController = require("../controllers/authController");
 
-// Route for user registration
-router.post("/register", userController.register);
-
-// Route for user login
-router.post("/login", userController.login);
-
+// Route for admin get all user
+router.get("/getuser", authController.protect, userController.getUsers);
 
 module.exports = router;

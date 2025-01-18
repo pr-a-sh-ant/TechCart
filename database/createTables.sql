@@ -4,7 +4,7 @@ CREATE TABLE users (
 	lname VARCHAR(30) NOT NULL,
 	email VARCHAR(50),
     password VARCHAR(200),
-    isAdmin BOOL,
+    isAdmin BOOLEAN DEFAULT FALSE,
     createdDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -13,6 +13,8 @@ CREATE TABLE product (
     name VARCHAR(30) NOT NULL,
     description TINYTEXT,
     price DECIMAL(10,2),
+    image MEDIUMTEXT,
+    categoryId INT(5),
     createdDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -39,6 +41,12 @@ CREATE TABLE productsInOrder (
     PRIMARY KEY (orderId, productId) 
 );
 
+CREATE TABLE Category (
+    categoryId INT(5) AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    image MEDIUMTEXT
+);
+
 
 ALTER TABLE shopingCart
 ADD FOREIGN KEY (userId) REFERENCES users (userId),
@@ -50,3 +58,6 @@ ADD FOREIGN KEY (userId) REFERENCES users (userId);
 ALTER TABLE productsInOrder
 ADD FOREIGN KEY (orderId) REFERENCES orders (orderId),
 ADD FOREIGN KEY (productId) REFERENCES product (productId);
+
+ALTER TABLE product
+ADD FOREIGN KEY (categoryId) REFERENCES Category (categoryId);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./Login.scss";
 import { getBaseURL } from "../apiConfig";
-import TokenRefresher from "../Utils/token"; 
+import TokenRefresher from "../Utils/token";
 
 function Login(props) {
   let [uname, setUname] = useState("");
@@ -28,9 +28,15 @@ function Login(props) {
             sessionStorage.setItem("customerId", res.data[0].userId);
             sessionStorage.setItem("isAdmin", user ? true : false);
             sessionStorage.setItem("jwt_token", res.data[0].token);
-            sessionStorage.setItem("jwt_refresh_token", res.data[0].refreshToken);
+            sessionStorage.setItem(
+              "jwt_refresh_token",
+              res.data[0].refreshToken
+            );
             TokenRefresher(res.data[0].refreshToken);
-            props.setUserAuthenticatedStatus(user ? true : false, res.data[0].userId);
+            props.setUserAuthenticatedStatus(
+              user ? true : false,
+              res.data[0].userId
+            );
           } else {
             console.log("User not available");
           }
@@ -86,15 +92,14 @@ function Login(props) {
         </div>
         <div>
           <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={changePass}
-          ></input>
+          <input type="password" value={password} onChange={changePass}></input>
         </div>
         {error && <div className="error-message">{error}</div>}
         <button onClick={handleClick}>Login</button>
-        <div className="register-link" onClick={() => props.navigateToRegisterPage()}>
+        <div
+          className="register-link"
+          onClick={() => props.navigateToRegisterPage()}
+        >
           Is New User
         </div>
       </div>
