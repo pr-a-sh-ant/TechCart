@@ -3,9 +3,16 @@
 const express = require("express");
 const router = express.Router();
 const productController = require("../controllers/productController");
+const authController = require("../controllers/authController");
 
 // Route to get all products
 router.get("/", productController.getAllProducts);
+
+// Route to get all products by category
+router.get("/category/:category", productController.getProductsByCategory);
+
+// Route to get all categories
+router.get("/category", productController.getAllCategories);
 
 // Route to get product details by ID
 router.get("/:id", productController.getProductDetailsById);
@@ -14,12 +21,16 @@ router.get("/:id", productController.getProductDetailsById);
 router.get("/allOrderByProductId/:id", productController.allOrderByProductId);
 
 // Route to create a new product
-router.post("/create", productController.createProduct);
+router.post("/create", authController.protect, productController.createProduct);
 
 // Route to update an existing product
-router.post("/update", productController.updateProduct);
+router.post("/update", authController.protect, productController.updateProduct);
 
 // Route to delete a product by ID
-router.delete("/delete/:id", productController.deleteProduct);
+router.delete(
+  "/delete/:id",
+  authController.protect,
+  productController.deleteProduct
+);
 
 module.exports = router;

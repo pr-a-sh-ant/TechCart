@@ -14,6 +14,32 @@ exports.getAllProducts = () => {
   });
 };
 
+exports.getAllCategories = () => {
+  return new Promise((resolve, reject) => {
+    pool.query("SELECT * FROM category;", (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
+exports.getProductsByCategory = (category) => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT p.* FROM product p INNER JOIN category c on product.categoryId = category.categoryID WHERE category.name = ?";
+    pool.query(query, [category], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
 exports.getProductDetailsById = (productId) => {
   return new Promise((resolve, reject) => {
     const query = "SELECT * FROM product WHERE productId = ?";
