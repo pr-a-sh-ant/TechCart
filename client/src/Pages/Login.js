@@ -1,13 +1,11 @@
-import React from 'react'
-import CredentialSignIn from '../components/sign-up'
-import Navbar from '../components/Navbar'
+import React from "react";
+import CredentialSignIn from "../components/sign-in";
 const Login = () => {
   return (
-    <div id = "login" className=''>
-        <Navbar/>
+    <div id="login" className="">
       <CredentialSignIn />
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

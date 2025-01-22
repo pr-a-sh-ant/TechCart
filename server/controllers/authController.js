@@ -25,7 +25,7 @@ exports.login = (req, res) => {
   authModel
     .login(email, password)
     .then((result) => {
-      res.status(201).send(result);
+      res.status(201).send({ result: result });
     })
     .catch((err) => {
       console.error(err.message);

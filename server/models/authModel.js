@@ -90,8 +90,7 @@ exports.login = (email, password) => {
                   //     maxAge: 24 * 60 * 60 * 1000
                   // });
 
-                  let response = [userData];
-                  resolve(response);
+                  resolve(userData);
                 }
               }
             );
