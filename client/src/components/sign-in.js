@@ -11,7 +11,7 @@ const providers = [{ id: "credentials", name: "Email and Password" }];
 
 const signIn = async (provider, formData) => {
   try {
-    const res = await fetch(`${getBaseURL()}api/auth/login`, {
+    const res = await fetch(`${getBaseURL()}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,8 +29,9 @@ const signIn = async (provider, formData) => {
       localStorage.setItem("token", data.result.token);
       localStorage.setItem("refreshToken", data.result.refreshToken);
       localStorage.setItem("userId", data.result.userId);
-      toast.success("Successfully Logged In");
+      localStorage.setItem("isAdmin", data.result.isAdmin);
       window.location.href = "/";
+      toast.success("Successfully Logged In");
     }
   } catch (error) {
     toast.error(error.message);

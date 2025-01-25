@@ -8,5 +8,3 @@ const tokenController = require("../controllers/tokenController");
 router.post("/refreshToken", tokenController.getRefreshToken);
 
 module.exports = router;
-
-

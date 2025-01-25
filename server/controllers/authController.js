@@ -36,14 +36,8 @@ exports.login = (req, res) => {
 exports.protect = async (req, res, next) => {
   //1)Getting token and check if it's there
   let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
-  } else if (req.cookies.jwt) {
-    token = req.cookie.jwt;
-  }
+
+  token = req.headers.authorization.split(" ")[1];
 
   if (!token) {
     res.status(401).send("Unauthorized: Missing or invalid token");
@@ -55,11 +49,9 @@ exports.protect = async (req, res, next) => {
       process.env.JWT_SECRET_KEY_ACCESS_TOKEN
     );
     //3) Check if user is Valid
-    let currentUser;
     userModel
       .getUserById(decoded.userId)
       .then((result) => {
-        console.log("result", result[0]);
         const currentUser = result[0];
         req.user = currentUser;
         next();
@@ -77,8 +69,8 @@ exports.restrictTo = (req, res, next) => {
   if (req.user.isAdmin) {
     return next();
   } else {
-    res.status(403).send({
-      statusId: 403,
+    res.status(401).send({
+      statusId: 401,
       status: "failed",
       message: "Forbidden: You are not authorized to perform this action",
     });

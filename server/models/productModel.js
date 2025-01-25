@@ -26,6 +26,41 @@ exports.getAllCategories = () => {
   });
 };
 
+exports.getAllCategoriesWithProducts = () => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT c.categoryID, c.name as categoryName, p.productId, p.name as productName, p.price, p.description
+      FROM category c
+      LEFT JOIN product p ON c.categoryID = p.categoryId;
+    `;
+    pool.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const categories = {};
+        result.forEach((row) => {
+          if (!categories[row.categoryID]) {
+            categories[row.categoryID] = {
+              categoryID: row.categoryID,
+              categoryName: row.categoryName,
+              products: [],
+            };
+          }
+          if (row.productId) {
+            categories[row.categoryID].products.push({
+              productId: row.productId,
+              productName: row.productName,
+              price: row.price,
+              description: row.description,
+            });
+          }
+        });
+        resolve(Object.values(categories));
+      }
+    });
+  });
+};
+
 exports.getProductsByCategory = (category) => {
   return new Promise((resolve, reject) => {
     const query =
@@ -72,11 +107,11 @@ exports.allOrderByProductId = (productId) => {
   });
 };
 
-exports.createProduct = (name, price, description) => {
+exports.createProduct = (name, price, description, categoryId, imageURL) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      "INSERT INTO product (name, price, description) VALUES (?,?,?);",
-      [name, price, description],
+      "INSERT INTO product (name, price, description, categoryId, image) VALUES (?,?,?,?,?);",
+      [name, price, description, categoryId, imageURL],
       (err, result) => {
         if (err) {
           reject(err);

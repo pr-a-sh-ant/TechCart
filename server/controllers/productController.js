@@ -14,15 +14,25 @@ exports.getAllProducts = (req, res) => {
     });
 };
 
-exports.getAllCategories = (req, res) => {
+exports.getAllCategory = (req, res) => {
   productModel
     .getAllCategories()
     .then((products) => {
       res.json(products);
     })
     .catch((error) => {
-      console.error("Error fetching products:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ error: error.message });
+    });
+};
+
+exports.getAllCategoriesWithProduct = (req, res) => {
+  productModel
+    .getAllCategoriesWithProducts()
+    .then((products) => {
+      res.json(products);
+    })
+    .catch((error) => {
+      res.status(500).json({ error: error.message });
     });
 };
 
@@ -66,9 +76,9 @@ exports.allOrderByProductId = (req, res) => {
 };
 
 exports.createProduct = (req, res) => {
-  const { name, price, description } = req.body;
+  const { name, price, description, imageURL, categoryID } = req.body;
   productModel
-    .createProduct(name, price, description)
+    .createProduct(name, price, description, categoryID, imageURL)
     .then((result) => {
       res.send(result);
     })

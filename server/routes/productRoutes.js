@@ -12,7 +12,10 @@ router.get("/", productController.getAllProducts);
 router.get("/category/:category", productController.getProductsByCategory);
 
 // Route to get all categories
-router.get("/category", productController.getAllCategories);
+router.get("/category", productController.getAllCategory);
+
+// Route to get all categories
+router.get("/categoryproduct", productController.getAllCategoriesWithProduct);
 
 // Route to get product details by ID
 router.get("/:id", productController.getProductDetailsById);
@@ -21,7 +24,12 @@ router.get("/:id", productController.getProductDetailsById);
 router.get("/allOrderByProductId/:id", productController.allOrderByProductId);
 
 // Route to create a new product
-router.post("/create", authController.protect, productController.createProduct);
+router.post(
+  "/create",
+  authController.protect,
+  authController.restrictTo,
+  productController.createProduct
+);
 
 // Route to update an existing product
 router.post("/update", authController.protect, productController.updateProduct);

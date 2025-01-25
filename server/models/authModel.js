@@ -77,6 +77,7 @@ exports.login = (email, password) => {
                   // Passwords match, authenticate the user
                   let userData = {
                     userId: result[0].userId,
+                    isAdmin: result[0].isAdmin,
                   };
                   const { token, refreshToken } =
                     generateAccessAndRefreshToken(userData);
