@@ -13,6 +13,8 @@ import Provider from "./utils/Provider";
 import AdminUsers from "./Pages/admin/Users";
 import AdminProducts from "./Pages/admin/Products";
 import AddProduct from "./Pages/admin/AddProduct";
+import AddCategory from "./Pages/admin/AddCategory";
+import Register from "./Pages/register";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -26,7 +28,7 @@ function App() {
             {!isAuthenticated ? (
               <>
                 <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<p>Register</p>} />
+                <Route path="/register" element={<Register />} />
               </>
             ) : (
               <>
@@ -45,6 +47,7 @@ function App() {
                 <Route path="users" element={<AdminUsers />} />
                 <Route path="products" element={<AdminProducts />} />
                 <Route path="addproduct" element={<AddProduct />} />
+                <Route path="addcategory" element={<AddCategory />} />
               </Route>
             </Route>
             {/* Catch-all route for 404 */}

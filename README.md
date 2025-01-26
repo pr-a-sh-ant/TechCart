@@ -4,7 +4,7 @@ TechCart Project
 
 ## Description
 
-This project is an E-commerce platform designed to provide users with a convenient and seamless shopping experience. It aims to offer computer related items.
+This project is an E-commerce platform designed to provide users with a convenient and seamless shopping experience. It aims to offer computer related items with ease
 
 ## Technologies Used
 
@@ -48,5 +48,3 @@ This project is an E-commerce platform designed to provide users with a convenie
 We are using Mysql in this project.
 
 In database folder we have createTables.sql use this file to create table in MySQL.
-
-### Application Screens

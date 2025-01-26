@@ -107,11 +107,27 @@ exports.allOrderByProductId = (productId) => {
   });
 };
 
-exports.createProduct = (name, price, description, categoryId, imageURL) => {
+exports.createProduct = (name, price, description, categoryId, image) => {
   return new Promise((resolve, reject) => {
     pool.query(
       "INSERT INTO product (name, price, description, categoryId, image) VALUES (?,?,?,?,?);",
-      [name, price, description, categoryId, imageURL],
+      [name, price, description, categoryId, image],
+      (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
+exports.createCategory = (name, image) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      "INSERT INTO category (name, image) VALUES (?,?);",
+      [name, image],
       (err, result) => {
         if (err) {
           reject(err);

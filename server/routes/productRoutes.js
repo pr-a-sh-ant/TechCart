@@ -14,7 +14,7 @@ router.get("/category/:category", productController.getProductsByCategory);
 // Route to get all categories
 router.get("/category", productController.getAllCategory);
 
-// Route to get all categories
+// Route to get all categories with products
 router.get("/categoryproduct", productController.getAllCategoriesWithProduct);
 
 // Route to get product details by ID
@@ -29,6 +29,14 @@ router.post(
   authController.protect,
   authController.restrictTo,
   productController.createProduct
+);
+
+// Route to create a new catergory
+router.post(
+  "/createCategory",
+  authController.protect,
+  authController.restrictTo,
+  productController.createCategory
 );
 
 // Route to update an existing product

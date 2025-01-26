@@ -76,15 +76,28 @@ exports.allOrderByProductId = (req, res) => {
 };
 
 exports.createProduct = (req, res) => {
-  const { name, price, description, imageURL, categoryID } = req.body;
+  const { name, price, description, image, categoryID } = req.body;
   productModel
-    .createProduct(name, price, description, categoryID, imageURL)
+    .createProduct(name, price, description, categoryID, image)
     .then((result) => {
-      res.send(result);
+      res.status(201).send(result);
     })
     .catch((err) => {
       console.error(err.message);
       res.status(500).send("Error creating product.");
+    });
+};
+
+exports.createCategory = (req, res) => {
+  const { name, image } = req.body;
+  productModel
+    .createCategory(name, image)
+    .then((result) => {
+      res.status(201).send(result);
+    })
+    .catch((err) => {
+      console.error(err.message);
+      res.status(500).send("Error creating category.");
     });
 };
 

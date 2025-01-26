@@ -1,12 +1,11 @@
 import { useForm } from "react-hook-form";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { getBaseURL } from "../../../apiconfig";
-import Loading from "../../../components/loading";
-import ErrorPage from "../../../components/error";
+
 import { toast } from "react-hot-toast";
 import useAxios from "../../../utils/axios";
 
-const AddProduct = () => {
+const AddCategory = () => {
   const api = useAxios();
   const {
     register,
@@ -16,25 +15,12 @@ const AddProduct = () => {
   } = useForm({
     defaultValues: {
       name: "",
-      price: "",
-      description: "",
-      categoryID: "",
       image: "",
     },
   });
-  const {
-    isLoading,
-    error,
-    data: categories,
-  } = useQuery({
-    queryKey: ["usersData"],
-    queryFn: () =>
-      fetch(`${getBaseURL()}/products/category`).then((res) => res.json()),
-  });
-
   const mutation = useMutation({
     mutationFn: async (formData) => {
-      const response = await api.post("/products/create", formData);
+      const response = await api.post("/products/createCategory", formData);
       return response.data;
     },
     onSuccess: () => {
@@ -45,10 +31,6 @@ const AddProduct = () => {
       toast.error(error.message);
     },
   });
-
-  if (isLoading) return <Loading />;
-
-  if (error) return <ErrorPage message={error.message} />;
 
   const onSubmit = (data) => {
     console.log(data);
@@ -108,53 +90,6 @@ const AddProduct = () => {
           )}
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700">Price</label>
-          <input
-            type="number"
-            {...register("price", {
-              required: "This field is required",
-              validate: {
-                positive: (value) =>
-                  value > 0 || "Price must be greater than 0",
-              },
-            })}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.price && (
-            <span className="text-red-500">{errors.price.message}</span>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700">Description</label>
-          <textarea
-            {...register("description", { required: true })}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.description && (
-            <span className="text-red-500">This field is required</span>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700">Category</label>
-          <select
-            {...register("categoryID", { required: true })}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select a category</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.categoryId}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-          {errors.categoryID && (
-            <span className="text-red-500">This field is required</span>
-          )}
-        </div>
-
         <div className="mb-6 md:flex">
           <label className="label md:w-1/5" htmlFor="imageFile">
             Upload Image
@@ -193,4 +128,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default AddCategory;

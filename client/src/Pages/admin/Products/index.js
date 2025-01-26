@@ -25,13 +25,19 @@ const AdminProducts = () => {
   const navigateToAddProduct = () => {
     window.location.href = "/admin/addproduct";
   };
+  const navigateToAddCategory = () => {
+    window.location.href = "/admin/addcategory";
+  };
 
   return (
     <div className="admin-products p-6 bg-gray-100 min-h-screen">
       <div className="header mb-6 flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-800">Products</h1>
         <div className="actions space-x-4">
-          <button className="add-category-button bg-green-500 text-white px-4 py-2 rounded-lg">
+          <button
+            className="add-category-button bg-green-500 text-white px-4 py-2 rounded-lg"
+            onClick={navigateToAddCategory}
+          >
             Add Category
           </button>
           <button
