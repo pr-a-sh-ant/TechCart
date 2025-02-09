@@ -1,156 +1,173 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
-const drawerWidth = 240;
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, ShoppingCart, User, LogOut, Search } from "lucide-react";
+import useAuth from "../hooks/useAuth";
 
-const navItems= [
-    {name: 'Home', path: '/'},
-    {name: 'About', path: '/about'},
-    {name: 'Contact', path: '/contact'},
-    {name: 'Login', path: '/login'}
-]
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
+  const { isAuthenticated, isAdmin, logout } = useAuth();
 
-function Navbar(props) {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const navigationLinks = [
+    { name: "Home", path: "/" },
+    { name: "Products", path: "/products" },
+    { name: "Categories", path: "/categories" },
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" },
+  ];
 
-  const handleDrawerToggle = () => {
-    setMobileOpen((prevState) => !prevState);
+  const isActiveRoute = (path) => {
+    return location.pathname === path;
   };
 
-  const drawer = (
-    <Box onClick={handleDrawerToggle}sx={{ textAlign: 'center' }} > 
-      <Typography variant="h6" sx={{ my: 2 }} className=''>
-        TechCart
-      </Typography>
-      <Divider />
-      <List>
-        {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item.name} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
-
-  const container = window !== undefined ? () => window().document.body : undefined;
-
   return (
-    <Box sx={{ display: 'flex'}} className='' >
-      <CssBaseline />
-   
-      <AppBar component="nav">
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-        TechCart
-          </Typography>
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }} className='w-[50%] '> 
-            {navItems.map((item) => (
-              <Button key={item.name} sx={{ color: '#fff' }}  >
-                <Link to={item.path} style={{ textDecoration: 'none', color: 'inherit' }}>
-                {item.name}
-                </Link>
-               
-              </Button>
-            ))}
-          </Box>
-        </Toolbar>
-      </AppBar>
-      
-      <nav>
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </nav>
-      <Box component="main" sx={{ p: 3 }}>
-        <Toolbar />
-        {/* <Typography>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique unde
-          fugit veniam eius, perspiciatis sunt? Corporis qui ducimus quibusdam,
-          aliquam dolore excepturi quae. Distinctio enim at eligendi perferendis in
-          cum quibusdam sed quae, accusantium et aperiam? Quod itaque exercitationem,
-          at ab sequi qui modi delectus quia corrupti alias distinctio nostrum.
-          Minima ex dolor modi inventore sapiente necessitatibus aliquam fuga et. Sed
-          numquam quibusdam at officia sapiente porro maxime corrupti perspiciatis
-          asperiores, exercitationem eius nostrum consequuntur iure aliquam itaque,
-          assumenda et! Quibusdam temporibus beatae doloremque voluptatum doloribus
-          soluta accusamus porro reprehenderit eos inventore facere, fugit, molestiae
-          ab officiis illo voluptates recusandae. Vel dolor nobis eius, ratione atque
-          soluta, aliquam fugit qui iste architecto perspiciatis. Nobis, voluptatem!
-          Cumque, eligendi unde aliquid minus quis sit debitis obcaecati error,
-          delectus quo eius exercitationem tempore. Delectus sapiente, provident
-          corporis dolorum quibusdam aut beatae repellendus est labore quisquam
-          praesentium repudiandae non vel laboriosam quo ab perferendis velit ipsa
-          deleniti modi! Ipsam, illo quod. Nesciunt commodi nihil corrupti cum non
-          fugiat praesentium doloremque architecto laborum aliquid. Quae, maxime
-          recusandae? Eveniet dolore molestiae dicta blanditiis est expedita eius
-          debitis cupiditate porro sed aspernatur quidem, repellat nihil quasi
-          praesentium quia eos, quibusdam provident. Incidunt tempore vel placeat
-          voluptate iure labore, repellendus beatae quia unde est aliquid dolor
-          molestias libero. Reiciendis similique exercitationem consequatur, nobis
-          placeat illo laudantium! Enim perferendis nulla soluta magni error,
-          provident repellat similique cupiditate ipsam, et tempore cumque quod! Qui,
-          iure suscipit tempora unde rerum autem saepe nisi vel cupiditate iusto.
-          Illum, corrupti? Fugiat quidem accusantium nulla. Aliquid inventore commodi
-          reprehenderit rerum reiciendis! Quidem alias repudiandae eaque eveniet
-          cumque nihil aliquam in expedita, impedit quas ipsum nesciunt ipsa ullam
-          consequuntur dignissimos numquam at nisi porro a, quaerat rem repellendus.
-          Voluptates perspiciatis, in pariatur impedit, nam facilis libero dolorem
-          dolores sunt inventore perferendis, aut sapiente modi nesciunt.
-        </Typography> */}
-      </Box>
-    </Box>
-  );
-}
+    <nav className="bg-white shadow-md">
+      {/* Desktop Navigation */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          {/* Logo and primary nav */}
+          <div className="flex items-center">
+            <Link to="/" className="flex-shrink-0 flex items-center">
+              <h1 className="text-2xl font-bold text-blue-600">TechCart</h1>
+            </Link>
 
-Navbar.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
+            <div className="hidden md:ml-6 md:flex md:space-x-8">
+              {navigationLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors duration-200 ${
+                    isActiveRoute(link.path)
+                      ? "border-blue-500 text-gray-900"
+                      : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Search bar */}
+          <div className="flex-1 max-w-xs mx-4 hidden md:flex items-center">
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-1 rounded-full border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <Search className="absolute right-3 top-1.5 h-5 w-5 text-gray-400" />
+            </div>
+          </div>
+
+          {/* Right side buttons */}
+          <div className="hidden md:flex items-center space-x-4">
+            <button className="p-2 rounded-full hover:bg-gray-100">
+              <ShoppingCart className="h-6 w-6 text-gray-600" />
+            </button>
+
+            {isAuthenticated ? (
+              <div className="relative ml-3 flex items-center space-x-4">
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                  >
+                    Admin Panel
+                  </Link>
+                )}
+                <button
+                  onClick={logout}
+                  className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                >
+                  <LogOut className="h-5 w-5 mr-1" />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+              >
+                <User className="h-5 w-5 mr-1" />
+                Login
+              </Link>
+            )}
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="flex items-center md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
+            >
+              {isOpen ? (
+                <X className="block h-6 w-6" />
+              ) : (
+                <Menu className="block h-6 w-6" />
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {isOpen && (
+        <div className="md:hidden">
+          <div className="px-2 pt-2 pb-3 space-y-1">
+            {navigationLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.path}
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  isActiveRoute(link.path)
+                    ? "bg-blue-50 text-blue-700"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                }`}
+                onClick={() => setIsOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ))}
+
+            {isAuthenticated ? (
+              <>
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Admin Panel
+                  </Link>
+                )}
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsOpen(false);
+                  }}
+                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                onClick={() => setIsOpen(false)}
+              >
+                Login
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
+    </nav>
+  );
 };
 
 export default Navbar;

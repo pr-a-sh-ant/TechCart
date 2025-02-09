@@ -28,14 +28,117 @@ const pool = mysql2.createConnection(connectionParams);
 pool.connect((err) => {
   if (err) console.log(err.message);
   else console.log("DB Connection Done");
-  pool.query("CREATE DATABASE IF NOT EXISTS `ecommerce`", (err, result) => {
-    if (err) console.log(err.message);
-    pool.changeUser({ database: "ecommerce" }, (err) => {
-      if (err) console.log(err.message);
-      else console.log("DB Changed");
-    });
+  // Check if the database exists
+  pool.query("SHOW DATABASES LIKE 'ecommerce'", (err, result) => {
+    if (err) {
+      console.log("Error checking database existence:", err.message);
+      return;
+    }
+
+    if (result.length === 0) {
+      // Database does not exist, create it
+      pool.query("CREATE DATABASE `ecommerce`", (err, result) => {
+        if (err) {
+          console.log("Error creating database:", err.message);
+          return;
+        }
+        console.log("Database 'ecommerce' created");
+
+        // Switch to the ecommerce database
+        switchToEcommerceDatabase(() => {
+          // Execute table creation and foreign key setup ONLY ONCE when the database is first created
+          createTablesAndForeignKeys();
+        });
+      });
+    } else {
+      // Database already exists, switch to it
+      console.log("Database 'ecommerce' already exists");
+      switchToEcommerceDatabase(); // Do NOT execute createTablesAndForeignKeys()
+    }
   });
 });
+
+function switchToEcommerceDatabase(callback) {
+  pool.changeUser({ database: "ecommerce" }, (err) => {
+    if (err) {
+      console.log("Error switching to database:", err.message);
+      return;
+    }
+    console.log("Switched to 'ecommerce' database");
+
+    // Execute the callback if provided
+    if (callback) callback();
+  });
+}
+
+function createTablesAndForeignKeys() {
+  const queries = [
+    `CREATE TABLE IF NOT EXISTS users (
+      userId INT(5) AUTO_INCREMENT PRIMARY KEY,
+      fname VARCHAR(30) NOT NULL,
+      lname VARCHAR(30) NOT NULL,
+      email VARCHAR(50),
+      password VARCHAR(200),
+      isAdmin BOOLEAN DEFAULT FALSE,
+      createdDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE TABLE IF NOT EXISTS product (
+      productId INT(5) AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(30) NOT NULL,
+      description TINYTEXT,
+      price DECIMAL(10,2),
+      image MEDIUMTEXT,
+      categoryId INT(5),
+      createdDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE TABLE IF NOT EXISTS shopingCart (
+      userId INT(5),
+      productId INT(5),
+      quantity INT,
+      PRIMARY KEY (userId, productId)
+    )`,
+    `CREATE TABLE IF NOT EXISTS orders (
+      orderId INT(10) AUTO_INCREMENT PRIMARY KEY,
+      userId INT(5),
+      address VARCHAR(500),
+      totalPrice DECIMAL(10,2),
+      createdDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE TABLE IF NOT EXISTS productsInOrder (
+      orderId INT(5),
+      productId INT(5),
+      quantity INT,
+      totalPrice DECIMAL(10,2),
+      PRIMARY KEY (orderId, productId)
+    )`,
+    `CREATE TABLE IF NOT EXISTS Category (
+      categoryId INT(5) AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(30) NOT NULL,
+      image MEDIUMTEXT
+    )`,
+    `ALTER TABLE shopingCart
+     ADD FOREIGN KEY (userId) REFERENCES users (userId),
+     ADD FOREIGN KEY (productId) REFERENCES product (productId)`,
+    `ALTER TABLE orders
+     ADD FOREIGN KEY (userId) REFERENCES users (userId)`,
+    `ALTER TABLE productsInOrder
+     ADD FOREIGN KEY (orderId) REFERENCES orders (orderId),
+     ADD FOREIGN KEY (productId) REFERENCES product (productId)`,
+    `ALTER TABLE product
+     ADD FOREIGN KEY (categoryId) REFERENCES Category (categoryId)`,
+  ];
+
+  // Execute each query sequentially
+  queries.forEach((query, index) => {
+    pool.query(query, (err, result) => {
+      if (err) {
+        console.log(`Error executing query ${index + 1}:`, err.message);
+      } else {
+        console.log(`Query ${index + 1} executed successfully`);
+      }
+    });
+  });
+}
 
 // Export the pool
 module.exports = pool;

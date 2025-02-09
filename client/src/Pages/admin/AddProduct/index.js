@@ -8,6 +8,9 @@ import useAxios from "../../../utils/axios";
 
 const AddProduct = () => {
   const api = useAxios();
+  const queryParams = new URLSearchParams(window.location.search);
+  const isEdit = queryParams.get("edit") === "true";
+  const productId = queryParams.get("productId");
   const {
     register,
     handleSubmit,
@@ -22,19 +25,41 @@ const AddProduct = () => {
       image: "",
     },
   });
+  if (isEdit) {
+    // fetch data and set default values
+    fetch(`${getBaseURL()}/products/${productId}`)
+      .then((res) => {
+        if (res.ok) {
+          res.json().then((data) => {
+            setValue("name", data[0].name);
+            setValue("price", data[0].price);
+            setValue("description", data[0].description);
+            setValue("image", data[0].image);
+          });
+        } else {
+          throw new Error("Failed to fetch product data");
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  }
   const {
     isLoading,
     error,
     data: categories,
   } = useQuery({
-    queryKey: ["usersData"],
+    queryKey: ["categoryData"],
     queryFn: () =>
       fetch(`${getBaseURL()}/products/category`).then((res) => res.json()),
   });
 
-  const mutation = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (formData) => {
-      const response = await api.post("/products/create", formData);
+      const response = await api.post(
+        `/products/${isEdit ? `update/${productId}` : "create"}}`,
+        formData
+      );
       return response.data;
     },
     onSuccess: () => {
@@ -51,8 +76,7 @@ const AddProduct = () => {
   if (error) return <ErrorPage message={error.message} />;
 
   const onSubmit = (data) => {
-    console.log(data);
-    mutation.mutate(data);
+    mutate(data);
   };
 
   const uploadHandler = async (e) => {
@@ -185,6 +209,7 @@ const AddProduct = () => {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+          disabled={isPending}
         >
           Add Product
         </button>

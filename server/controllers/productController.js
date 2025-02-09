@@ -54,7 +54,7 @@ exports.getProductDetailsById = (req, res) => {
   productModel
     .getProductDetailsById(productId)
     .then((result) => {
-      res.send(result);
+      res.status(200).send(result);
     })
     .catch((err) => {
       console.error(err.message);
@@ -102,9 +102,10 @@ exports.createCategory = (req, res) => {
 };
 
 exports.updateProduct = (req, res) => {
-  const { id, name, price, description } = req.body;
+  const id = req.params.id;
+  const { name, price, description, image, categoryID } = req.body;
   productModel
-    .updateProduct(id, name, price, description)
+    .updateProduct(id, name, price, description, image, categoryID)
     .then((result) => {
       res.send(result);
     })
@@ -118,6 +119,19 @@ exports.deleteProduct = (req, res) => {
   const productId = req.params.id;
   productModel
     .deleteProduct(productId)
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      console.error(err.message);
+      res.status(500).send("Error deleting product.");
+    });
+};
+
+exports.deleteCategory = (req, res) => {
+  const categoryId = req.params.id;
+  productModel
+    .deleteCategory(categoryId)
     .then((result) => {
       res.send(result);
     })

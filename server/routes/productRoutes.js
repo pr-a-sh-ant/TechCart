@@ -40,13 +40,25 @@ router.post(
 );
 
 // Route to update an existing product
-router.post("/update", authController.protect, productController.updateProduct);
+router.post(
+  "/update/:id",
+  authController.protect,
+  productController.updateProduct
+);
 
 // Route to delete a product by ID
 router.delete(
   "/delete/:id",
   authController.protect,
+  authController.restrictTo,
   productController.deleteProduct
+);
+
+router.delete(
+  "/deleteCategory/:id",
+  authController.protect,
+  authController.restrictTo,
+  productController.deleteCategory
 );
 
 module.exports = router;

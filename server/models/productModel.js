@@ -139,11 +139,18 @@ exports.createCategory = (name, image) => {
   });
 };
 
-exports.updateProduct = (productId, name, price, description) => {
+exports.updateProduct = (
+  productId,
+  name,
+  price,
+  description,
+  image,
+  categoryID
+) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      "UPDATE product SET name = ?, price = ?, description = ? WHERE productId = ?",
-      [name, price, description, productId],
+      "UPDATE product SET name = ?, price = ?, description = ?, image = ?, categoryId = ? WHERE productId = ?",
+      [name, price, description, image, categoryID, productId],
       (err, result) => {
         if (err) {
           reject(err);
@@ -160,6 +167,22 @@ exports.deleteProduct = (productId) => {
     pool.query(
       "DELETE FROM product WHERE productId = ?",
       [productId],
+      (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
+exports.deleteCategory = (categoryId) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      "DELETE FROM category WHERE categoryId = ?",
+      [categoryId],
       (err, result) => {
         if (err) {
           reject(err);

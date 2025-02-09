@@ -37,6 +37,9 @@ const signIn = async (provider, formData) => {
     toast.error(error.message);
   }
 };
+function SignUpLink() {
+  return <a href="/register">Sign up</a>;
+}
 
 export default function CredentialsSignInPage() {
   const theme = useTheme();
@@ -47,6 +50,7 @@ export default function CredentialsSignInPage() {
         signIn={signIn}
         providers={providers}
         slotProps={{ emailField: { autoFocus: false } }}
+        slots={{ signUpLink: SignUpLink }}
       />
     </AppProvider>
     // preview-end
