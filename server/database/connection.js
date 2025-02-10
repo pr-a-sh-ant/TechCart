@@ -20,15 +20,25 @@ if (useLocalhost) {
     host: process.env.DB_SERVER_HOST,
     password: process.env.DB_SERVER_PASSWORD,
     database: process.env.DB_SERVER_DATABASE,
+    port: process.env.DB_SERVER_PORT,
+    ssl: {
+      rejectUnauthorized: true,
+      ca: process.env.DB_SERVER_CA,
+    },
   };
 }
 
 const pool = mysql2.createConnection(connectionParams);
 
+pool.on("error", (err) => {
+  console.log("Database error:", err.message);
+});
+
 pool.connect((err) => {
   if (err) console.log(err.message);
   else console.log("DB Connection Done");
   // Check if the database exists
+
   pool.query("SHOW DATABASES LIKE 'ecommerce'", (err, result) => {
     if (err) {
       console.log("Error checking database existence:", err.message);
@@ -48,6 +58,13 @@ pool.connect((err) => {
         switchToEcommerceDatabase(() => {
           // Execute table creation and foreign key setup ONLY ONCE when the database is first created
           createTablesAndForeignKeys();
+          pool.query("SHOW TABLES", (err, result) => {
+            if (err) {
+              console.log("Error checking table existence:", err.message);
+              return;
+            }
+            console.log("Tables in ecommerce database:", result);
+          });
         });
       });
     } else {
@@ -111,7 +128,7 @@ function createTablesAndForeignKeys() {
       totalPrice DECIMAL(10,2),
       PRIMARY KEY (orderId, productId)
     )`,
-    `CREATE TABLE IF NOT EXISTS Category (
+    `CREATE TABLE IF NOT EXISTS category (
       categoryId INT(5) AUTO_INCREMENT PRIMARY KEY,
       name VARCHAR(30) NOT NULL,
       image MEDIUMTEXT
@@ -125,7 +142,7 @@ function createTablesAndForeignKeys() {
      ADD FOREIGN KEY (orderId) REFERENCES orders (orderId),
      ADD FOREIGN KEY (productId) REFERENCES product (productId)`,
     `ALTER TABLE product
-     ADD FOREIGN KEY (categoryId) REFERENCES Category (categoryId)`,
+     ADD FOREIGN KEY (categoryId) REFERENCES category (categoryId)`,
   ];
 
   // Execute each query sequentially

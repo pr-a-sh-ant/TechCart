@@ -25,6 +25,7 @@ const HomePage = () => {
     queryFn: () =>
       fetch(`${getBaseURL()}/products/category`).then((res) => res.json()),
   });
+  console.log(categories);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -66,7 +67,7 @@ const HomePage = () => {
           <ErrorPage />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {categories?.slice(0, 4).map((category) => {
+            {categories?.map((category) => {
               return (
                 <div className="relative overflow-hidden rounded-lg shadow-md group cursor-pointer transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/0 z-10" />
@@ -125,7 +126,7 @@ const HomePage = () => {
                   </p>
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-bold text-blue-500">
-                      ${product.price}
+                      Rs.{product.price}
                     </span>
                     <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
                       Add to Cart

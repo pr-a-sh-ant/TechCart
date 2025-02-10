@@ -18,6 +18,7 @@ exports.getAllCategories = () => {
   return new Promise((resolve, reject) => {
     pool.query("SELECT * FROM category;", (err, result) => {
       if (err) {
+        console.log(err);
         reject(err);
       } else {
         resolve(result);

@@ -5,6 +5,7 @@ import Loading from "../../../components/loading";
 import ErrorPage from "../../../components/error";
 import { toast } from "react-hot-toast";
 import useAxios from "../../../utils/axios";
+import { ImagePlus, Loader2 } from "lucide-react";
 
 const AddProduct = () => {
   const api = useAxios();
@@ -15,6 +16,7 @@ const AddProduct = () => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -25,8 +27,8 @@ const AddProduct = () => {
       image: "",
     },
   });
+
   if (isEdit) {
-    // fetch data and set default values
     fetch(`${getBaseURL()}/products/${productId}`)
       .then((res) => {
         if (res.ok) {
@@ -44,6 +46,7 @@ const AddProduct = () => {
         toast.error(err.message);
       });
   }
+
   const {
     isLoading,
     error,
@@ -57,7 +60,7 @@ const AddProduct = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: async (formData) => {
       const response = await api.post(
-        `/products/${isEdit ? `update/${productId}` : "create"}}`,
+        `/products/${isEdit ? `update/${productId}` : `create`}`,
         formData
       );
       return response.data;
@@ -72,7 +75,6 @@ const AddProduct = () => {
   });
 
   if (isLoading) return <Loading />;
-
   if (error) return <ErrorPage message={error.message} />;
 
   const onSubmit = (data) => {
@@ -112,108 +114,182 @@ const AddProduct = () => {
     }
   };
 
+  const imageUrl = watch("image");
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-5 rounded-lg shadow-lg w-full max-w-md"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center">Add New Product</h2>
+    <div className="bg-gray-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 className="text-center text-3xl font-extrabold text-gray-900">
+          {isEdit ? "Edit Product" : "Add New Product"}
+        </h2>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          {isEdit
+            ? "Update your product details"
+            : "Add a new product to your store"}
+        </p>
+      </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700">Product Name</label>
-          <input
-            type="text"
-            {...register("name", { required: true })}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.name && (
-            <span className="text-red-500">This field is required</span>
-          )}
-        </div>
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-8 px-4 shadow-xl border border-gray-100 sm:rounded-lg sm:px-10">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Product Name
+              </label>
+              <div className="mt-1">
+                <input
+                  type="text"
+                  {...register("name", {
+                    required: "Product name is required",
+                  })}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter product name"
+                />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.name.message}
+                  </p>
+                )}
+              </div>
+            </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700">Price</label>
-          <input
-            type="number"
-            {...register("price", {
-              required: "This field is required",
-              validate: {
-                positive: (value) =>
-                  value > 0 || "Price must be greater than 0",
-              },
-            })}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.price && (
-            <span className="text-red-500">{errors.price.message}</span>
-          )}
-        </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Price
+              </label>
+              <div className="mt-1">
+                <input
+                  type="number"
+                  {...register("price", {
+                    required: "Price is required",
+                    validate: {
+                      positive: (value) =>
+                        value > 0 || "Price must be greater than 0",
+                    },
+                  })}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter price"
+                />
+                {errors.price && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.price.message}
+                  </p>
+                )}
+              </div>
+            </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700">Description</label>
-          <textarea
-            {...register("description", { required: true })}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.description && (
-            <span className="text-red-500">This field is required</span>
-          )}
-        </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Description
+              </label>
+              <div className="mt-1">
+                <textarea
+                  {...register("description", {
+                    required: "Description is required",
+                  })}
+                  rows={4}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter product description"
+                />
+                {errors.description && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.description.message}
+                  </p>
+                )}
+              </div>
+            </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700">Category</label>
-          <select
-            {...register("categoryID", { required: true })}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select a category</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.categoryId}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-          {errors.categoryID && (
-            <span className="text-red-500">This field is required</span>
-          )}
-        </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Category
+              </label>
+              <div className="mt-1">
+                <select
+                  {...register("categoryID", {
+                    required: "Category is required",
+                  })}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="">Select a category</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.categoryId}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.categoryID && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.categoryID.message}
+                  </p>
+                )}
+              </div>
+            </div>
 
-        <div className="mb-6 md:flex">
-          <label className="label md:w-1/5" htmlFor="imageFile">
-            Upload Image
-          </label>
-          <div className="md:w-4/5">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Product Image
+              </label>
+              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                <div className="space-y-1 text-center">
+                  <ImagePlus className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="flex text-sm text-gray-600">
+                    <label
+                      htmlFor="imageFile"
+                      className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none"
+                    >
+                      <span>Upload a file</span>
+                      <input
+                        id="imageFile"
+                        type="file"
+                        className="sr-only"
+                        onChange={uploadHandler}
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    PNG, JPG, GIF up to 10MB
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {imageUrl && (
+              <div className="relative rounded-lg overflow-hidden h-32">
+                <img
+                  src={imageUrl}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+
             <input
-              type="file"
-              className="file-input w-full max-w-md"
-              id="imageFile"
-              onChange={uploadHandler}
+              type="hidden"
+              {...register("image", { required: "Image is required" })}
             />
-          </div>
-        </div>
+            {errors.image && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.image.message}
+              </p>
+            )}
 
-        <div className="mb-4">
-          <label className="block text-gray-700">Image URL</label>
-          <input
-            type="text"
-            {...register("image", { required: true })}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            readOnly
-          />
-          {errors.imageUrl && (
-            <span className="text-red-500">This field is required</span>
-          )}
+            <button
+              type="submit"
+              disabled={isPending}
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isPending ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : isEdit ? (
+                "Update Product"
+              ) : (
+                "Add Product"
+              )}
+            </button>
+          </form>
         </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
-          disabled={isPending}
-        >
-          Add Product
-        </button>
-      </form>
+      </div>
     </div>
   );
 };
