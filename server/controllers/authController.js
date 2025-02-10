@@ -9,7 +9,7 @@ const { promisify } = require("util");
 exports.register = (req, res) => {
   const { email, password, isAdmin, fname, lname } = req.body;
   authModel
-    .register(email, password, true, fname, lname)
+    .register(email, password, false, fname, lname)
     .then((result) => {
       console.log("Successful Register");
       res.status(201).send({ status: 201, data: result });
