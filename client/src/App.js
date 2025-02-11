@@ -6,6 +6,9 @@ import { Toaster } from "react-hot-toast";
 import useAuth from "./hooks/useAuth";
 
 import Navbar from "./components/Navbar";
+import About from "./Pages/About";
+import Categories from "./Pages/Categories";
+import ContactUs from "./Pages/Contact";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/register";
@@ -57,6 +60,10 @@ function AppContent() {
           {/* put protected routes here */}
         </Route>
         <Route path="/" element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<ContactUs />} />
+        <Route path="categories" element={<Categories />} />
+
         <Route element={<ProtectedRoute adminRoute={true} />}>
           {/* put admin routes here */}
           <Route path="/admin" element={<Admin />}>

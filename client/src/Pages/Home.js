@@ -5,6 +5,7 @@ import Loading from "../components/loading";
 import ErrorPage from "../components/error";
 import { getBaseURL } from "../apiconfig";
 import Banner from "../banner.png";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const {
@@ -69,21 +70,22 @@ const HomePage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories?.map((category) => {
               return (
-                <div className="relative overflow-hidden rounded-lg shadow-md group cursor-pointer transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/0 z-10" />
-                  <img
-                    src={category.image || "/placeholder.svg"}
-                    alt={category.name}
-                    width={300}
-                    height={200}
-                    className="object-cover w-full h-full transition-transform duration-300 ease-in-out group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 z-20 flex flex-col items-center justify-end p-6 text-white">
-                    <h3 className="text-xl font-semibold mb-2">
-                      {category.name}
-                    </h3>
-                  </div>
-                </div>
+                <>
+                <Link to="/categories" key={category.categoryId}>
+  <div className="relative h-[300px] overflow-hidden rounded-lg shadow-md group cursor-pointer transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
+    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/0 z-10" />
+    <img
+      src={category.image || "/placeholder.svg"}
+      alt={category.name}
+      className="object-cover w-full h-full transition-transform duration-300 ease-in-out group-hover:scale-110"
+    />
+    <div className="absolute inset-0 z-20 flex flex-col items-center justify-end p-6 text-white">
+      <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
+    </div>
+  </div>
+</Link>
+
+                </>
               );
             })}
           </div>
