@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import About from "./Pages/About";
 import Categories from "./Pages/Categories";
 import ContactUs from "./Pages/Contact";
+import Products from "./Pages/Products";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/register";
@@ -21,6 +22,7 @@ import AdminUsers from "./Pages/admin/Users";
 import AdminProducts from "./Pages/admin/Products";
 import AddProduct from "./Pages/admin/AddProduct";
 import AddCategory from "./Pages/admin/AddCategory";
+import Footer from "./components/footer";
 
 function App() {
   return (
@@ -41,6 +43,7 @@ function AppContent() {
   const shouldShowNavbar = !noNavbarRoutes.includes(location.pathname);
 
   return (
+    <>
     <div className="App">
       <Toaster />
       {shouldShowNavbar && <Navbar />}
@@ -63,6 +66,7 @@ function AppContent() {
         <Route path="about" element={<About />} />
         <Route path="contact" element={<ContactUs />} />
         <Route path="categories" element={<Categories />} />
+        <Route path="products" element={<Products />} />
 
         <Route element={<ProtectedRoute adminRoute={true} />}>
           {/* put admin routes here */}
@@ -78,6 +82,8 @@ function AppContent() {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
+      <Footer/>
+      </>
   );
 }
 
