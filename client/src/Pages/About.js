@@ -3,6 +3,7 @@ import React from "react";
 const AboutUs = () => {
   return (
     <>
+    <div className="mb-10">
     <div className="max-w-4xl mx-auto p-6 ">
       <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">About TechCart</h1>
     
@@ -31,6 +32,7 @@ const AboutUs = () => {
         Have questions? Feel free to reach out to us at 
         <span className="text-blue-500 font-medium"> support@techcart.com</span>.
       </p>
+      </div>
     </>
   );
 };

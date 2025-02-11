@@ -10,6 +10,7 @@ import About from "./Pages/About";
 import Categories from "./Pages/Categories";
 import ContactUs from "./Pages/Contact";
 import Products from "./Pages/Products";
+import ShippingPolicy from "./Pages/Policy";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/register";
@@ -67,6 +68,8 @@ function AppContent() {
         <Route path="contact" element={<ContactUs />} />
         <Route path="categories" element={<Categories />} />
         <Route path="products" element={<Products />} />
+        <Route path="policy" element={<ShippingPolicy />} />
+        
 
         <Route element={<ProtectedRoute adminRoute={true} />}>
           {/* put admin routes here */}
