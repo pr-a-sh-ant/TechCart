@@ -118,6 +118,7 @@ function createTablesAndForeignKeys() {
       orderId INT(10) AUTO_INCREMENT PRIMARY KEY,
       userId INT(5),
       address VARCHAR(500),
+      phoneNumber BIGINT(10),
       totalPrice DECIMAL(10,2),
       createdDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )`,

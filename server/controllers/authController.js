@@ -11,7 +11,6 @@ exports.register = (req, res) => {
   authModel
     .register(email, password, false, fname, lname)
     .then((result) => {
-      console.log("Successful Register");
       res.status(201).send({ status: 201, data: result });
     })
     .catch((err) => {
@@ -35,8 +34,8 @@ exports.login = (req, res) => {
 
 exports.protect = async (req, res, next) => {
   //1)Getting token and check if it's there
-  let token;
 
+  let token;
   token = req.headers.authorization.split(" ")[1];
 
   if (!token) {

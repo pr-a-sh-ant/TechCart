@@ -3,8 +3,9 @@
 const productModel = require("../models/productModel");
 
 exports.getAllProducts = (req, res) => {
+  const { category, search, minPrice, maxPrice } = req.query;
   productModel
-    .getAllProducts()
+    .getAllProducts(category, search, minPrice, maxPrice)
     .then((products) => {
       res.json(products);
     })
@@ -33,19 +34,6 @@ exports.getAllCategoriesWithProduct = (req, res) => {
     })
     .catch((error) => {
       res.status(500).json({ error: error.message });
-    });
-};
-
-exports.getProductsByCategory = (req, res) => {
-  const category = req.params.category;
-  productModel
-    .getProductsByCategory(category)
-    .then((products) => {
-      res.json(products);
-    })
-    .catch((error) => {
-      console.error("Error fetching products:", error);
-      res.status(500).json({ error: "Internal Server Error" });
     });
 };
 

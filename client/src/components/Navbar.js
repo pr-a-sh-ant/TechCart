@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart, User, LogOut, Search } from "lucide-react";
 import useAuth from "../hooks/useAuth";
+import useCartService from "../hooks/useCart";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
   const { isAuthenticated, isAdmin, logout } = useAuth();
+  const { totalItems } = useCartService();
 
   const navigationLinks = [
     { name: "Home", path: "/" },
@@ -19,6 +21,12 @@ const Navbar = () => {
 
   const isActiveRoute = (path) => {
     return location.pathname === path;
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      window.location.href = `/products?search=${searchQuery}`;
+    }
   };
 
   return (
@@ -57,16 +65,29 @@ const Navbar = () => {
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyUp={handleKeyPress}
                 className="w-full px-4 py-1 rounded-full border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <Search className="absolute right-3 top-1.5 h-5 w-5 text-gray-400" />
+              <Search
+                onClick={() =>
+                  (window.window.location.href = `/products?search=${searchQuery}`)
+                }
+                className="absolute right-3 top-1.5 h-5 w-5 text-gray-400 cursor-pointer"
+              />
             </div>
           </div>
 
-          {/* Right side buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <button className="p-2 rounded-full hover:bg-gray-100">
+            <button
+              className="p-2 rounded-full hover:bg-gray-100 relative"
+              onClick={() => (window.location.href = "/shoppingCart")}
+            >
               <ShoppingCart className="h-6 w-6 text-gray-600" />
+              {totalItems > 0 && (
+                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                  {totalItems}
+                </span>
+              )}
             </button>
 
             {isAuthenticated ? (

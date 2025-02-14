@@ -54,7 +54,7 @@ const AddProduct = () => {
   } = useQuery({
     queryKey: ["categoryData"],
     queryFn: () =>
-      fetch(`${getBaseURL()}/products/category`).then((res) => res.json()),
+      fetch(`${getBaseURL()}/categories`).then((res) => res.json()),
   });
 
   const { mutate, isPending } = useMutation({

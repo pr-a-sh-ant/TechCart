@@ -2,9 +2,17 @@
 
 const pool = require("../database/connection");
 
-exports.getAllProducts = () => {
+exports.getAllProducts = (category, search, minPrice, maxPrice) => {
+  const query =
+    "SELECT p.* FROM product p INNER JOIN category c ON c.categoryID = p.categoryId" +
+    (category || search || minPrice || maxPrice ? " WHERE" : "") +
+    (category ? ` c.name = '${category}' AND` : "") +
+    (search ? ` p.name LIKE '%${search}%' AND` : "") +
+    (minPrice ? ` p.price >= ${+minPrice} AND` : "") +
+    (maxPrice ? ` p.price <= ${+maxPrice} ` : "") +
+    ";";
   return new Promise((resolve, reject) => {
-    pool.query("SELECT * FROM product;", (err, result) => {
+    pool.query(query, (err, result) => {
       if (err) {
         reject(err);
       } else {
@@ -18,7 +26,6 @@ exports.getAllCategories = () => {
   return new Promise((resolve, reject) => {
     pool.query("SELECT * FROM category;", (err, result) => {
       if (err) {
-        console.log(err);
         reject(err);
       } else {
         resolve(result);
@@ -57,20 +64,6 @@ exports.getAllCategoriesWithProducts = () => {
           }
         });
         resolve(Object.values(categories));
-      }
-    });
-  });
-};
-
-exports.getProductsByCategory = (category) => {
-  return new Promise((resolve, reject) => {
-    const query =
-      "SELECT p.* FROM product p INNER JOIN category c on product.categoryId = category.categoryID WHERE category.name = ?";
-    pool.query(query, [category], (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
       }
     });
   });

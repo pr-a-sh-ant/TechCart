@@ -24,8 +24,7 @@ const AdminProducts = () => {
   });
 
   const { mutate: delteCategory } = useMutation({
-    mutationFn: async (id) =>
-      await api.delete(`/products/deleteCategory/${id}`),
+    mutationFn: async (id) => await api.delete(`/categories/delete/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries();
       toast.success("Category deleted successfully");

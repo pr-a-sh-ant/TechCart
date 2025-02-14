@@ -1,12 +1,12 @@
 import React from "react";
-import { ArrowRight, TrendingUp } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../components/loading";
 import ErrorPage from "../components/error";
 import { getBaseURL } from "../apiconfig";
 import Banner from "../banner.png";
 import { Link } from "react-router-dom";
-import Footer from "../components/footer";
+import Card from "../components/card";
 
 const HomePage = () => {
   const {
@@ -25,9 +25,8 @@ const HomePage = () => {
   } = useQuery({
     queryKey: ["categoryData"],
     queryFn: () =>
-      fetch(`${getBaseURL()}/products/category`).then((res) => res.json()),
+      fetch(`${getBaseURL()}/categories`).then((res) => res.json()),
   });
-  console.log(categories);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -43,7 +42,10 @@ const HomePage = () => {
                 Shop the most cutting-edge gadgets and electronics at unbeatable
                 prices
               </p>
-              <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+              <button
+                onClick={() => (window.location.href = "/products")}
+                className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+              >
                 Shop Now
               </button>
             </div>
@@ -52,8 +54,8 @@ const HomePage = () => {
                 src={Banner}
                 alt="Latest Technology"
                 className="rounded-lg shadow-xl"
-                height={150}
-                width={300}
+                height={400}
+                width={400}
               />
             </div>
           </div>
@@ -69,23 +71,27 @@ const HomePage = () => {
           <ErrorPage />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {categories?.map((category) => {
+            {categories?.slice(0, 4).map((category) => {
               return (
                 <>
-                <Link to="/categories" key={category.categoryId}>
-  <div className="relative h-[300px] overflow-hidden rounded-lg shadow-md group cursor-pointer transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
-    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/0 z-10" />
-    <img
-      src={category.image || "/placeholder.svg"}
-      alt={category.name}
-      className="object-cover w-full h-full transition-transform duration-300 ease-in-out group-hover:scale-110"
-    />
-    <div className="absolute inset-0 z-20 flex flex-col items-center justify-end p-6 text-white">
-      <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
-    </div>
-  </div>
-</Link>
-
+                  <Link
+                    to={`/products?category=${category.name}`}
+                    key={category.categoryId}
+                  >
+                    <div className="relative h-[300px] overflow-hidden rounded-lg shadow-md group cursor-pointer transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/0 z-10" />
+                      <img
+                        src={category.image}
+                        alt={category.name}
+                        className="object-cover w-full h-full transition-transform duration-300 ease-in-out group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 z-20 flex flex-col items-center justify-end p-6 text-white">
+                        <h3 className="text-xl font-semibold mb-2">
+                          {category.name}
+                        </h3>
+                      </div>
+                    </div>
+                  </Link>
                 </>
               );
             })}
@@ -95,56 +101,30 @@ const HomePage = () => {
 
       {/* Latest Products Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white">
-  <div className="flex justify-between items-center mb-8">
-    <h2 className="text-2xl font-bold text-gray-900">Latest Products</h2>
-    <button className="flex items-center text-blue-500 hover:text-blue-600">
-      View All <ArrowRight className="h-4 w-4 ml-2" />
-    </button>
-  </div>
-
-  {isLoading ? (
-    <Loading variant="dots" size="small" fullScreen={false} />
-  ) : error ? (
-    <ErrorPage />
-  ) : (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {products?.slice(0, 8).map((product) => (
-        <div
-          key={product.id}
-          className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
-        >
-          {/* Image container */}
-          <div className="relative pb-[100%]">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="absolute h-full w-full object-cover"
-            />
-          </div>
-
-          {/* Content section with flex-grow to align labels properly */}
-          <div className="p-4 flex flex-col flex-grow">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {product.name}
-            </h3>
-            <p className="text-sm text-gray-600 mb-4 flex-grow">
-              {product.description}
-            </p>
-            <div className="flex justify-between items-center">
-              <span className="text-lg font-bold text-blue-500">
-                Rs. {product.price}
-              </span>
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                Add to Cart
-              </button>
-            </div>
-          </div>
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900">Latest Products</h2>
+          <button
+            className="flex items-center text-blue-500 hover:text-blue-600"
+            onClick={() => {
+              window.location.href = "/products";
+            }}
+          >
+            View All <ArrowRight className="h-4 w-4 ml-2" />
+          </button>
         </div>
-      ))}
-    </div>
-  )}
-</section>
 
+        {isLoading ? (
+          <Loading variant="dots" size="small" fullScreen={false} />
+        ) : error ? (
+          <ErrorPage />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {products?.slice(0, 8).map((product) => (
+              <Card key={product.id} product={product} isHome={true} />
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* Trending Products */}
       {/* <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

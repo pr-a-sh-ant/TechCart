@@ -22,7 +22,7 @@ const AddCategory = () => {
 
   const mutation = useMutation({
     mutationFn: async (formData) => {
-      const response = await api.post("/products/createCategory", formData);
+      const response = await api.post("/categories/create", formData);
       return response.data;
     },
     onSuccess: () => {

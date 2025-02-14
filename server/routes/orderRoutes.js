@@ -3,9 +3,15 @@
 const express = require("express");
 const router = express.Router();
 const orderController = require("../controllers/orderController");
+const authController = require("../controllers/authController");
 
 // Route to get all orders
-router.get("/", orderController.getAllOrders);
+router.get(
+  "/",
+  authController.protect,
+  authController.restrictTo,
+  orderController.getAllOrders
+);
 
 // Route to get order details by ID
 router.get("/:id", orderController.getOrderById);

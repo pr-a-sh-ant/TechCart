@@ -7,6 +7,7 @@ const orderRoutes = require("./routes/orderRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const userToken = require("./routes/userTokenRoute");
 const userRoutes = require("./routes/userRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
 const cloudinarySign = require("./routes/cloudinarySign");
 
 const app = express();
@@ -21,6 +22,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/categories", categoryRoutes);
 app.use("/api/token", userToken);
 app.use("/api/user", userRoutes);
 app.use("/api/cloudinary-sign", cloudinarySign);
