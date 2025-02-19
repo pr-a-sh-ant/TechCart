@@ -7,7 +7,7 @@ const {
   refreshToken,
 } = require("../utils/token");
 
-exports.register = (email, password, isAdmin, fname, lname) => {
+exports.register = (email, password, fname, lname, isAdmin = false) => {
   return new Promise((resolve, reject) => {
     // First, check if the user with the provided email already exists
     pool.query(
@@ -52,7 +52,7 @@ exports.register = (email, password, isAdmin, fname, lname) => {
 exports.login = (email, password) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      "SELECT userId, password, isAdmin FROM users WHERE email = ?;",
+      "SELECT userId, password, isAdmin, fname FROM users WHERE email = ?;",
       [email],
       (err, result) => {
         if (err) {
@@ -78,6 +78,7 @@ exports.login = (email, password) => {
                   let userData = {
                     userId: result[0].userId,
                     isAdmin: result[0].isAdmin,
+                    fname: result[0].fname,
                   };
                   const { token, refreshToken } =
                     generateAccessAndRefreshToken(userData);

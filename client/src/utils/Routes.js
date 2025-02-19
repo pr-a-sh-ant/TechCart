@@ -24,18 +24,22 @@ import AddCategory from "../Pages/admin/AddCategory";
 import ConfirmOrder from "../Pages/shipping/index.js";
 import AdminDashboard from "../Pages/admin/Dashboard/index.js";
 import Orders from "../Pages/admin/Order/index.js";
+import MyOrder from "../Pages/MyOrder/index.js";
+import Footer from "../components/footer.js";
 
 const Routers = () => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  // List of routes where Navbar should not appear
-  const noNavbarRoutes = ["/login", "/register"];
-  const shouldShowNavbar = !noNavbarRoutes.includes(location.pathname);
+  // List of routes where Navbar and Footer should not appear
+  const noNavbarFooterRoutes = ["/login", "/register", "/admin"];
+  const shouldShowNavbarFooter = !noNavbarFooterRoutes.some((route) =>
+    location.pathname.startsWith(route)
+  );
 
   return (
     <>
-      {shouldShowNavbar && <Navbar />}
+      {shouldShowNavbarFooter && <Navbar />}
       <Routes>
         {!isAuthenticated ? (
           <>
@@ -50,6 +54,7 @@ const Routers = () => {
         )}
         <Route element={<ProtectedRoute />}>
           {/* put protected routes here */}
+          <Route path="/myorders" element={<MyOrder />} />
           <Route path="/shoppingCart" element={<Cart />} />
           <Route path="/shipping" element={<ConfirmOrder />} />
         </Route>
@@ -74,6 +79,7 @@ const Routers = () => {
         {/* Catch-all route for 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      {shouldShowNavbarFooter && <Footer />}
     </>
   );
 };

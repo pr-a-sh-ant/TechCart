@@ -1,14 +1,24 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ShoppingCart, User, LogOut, Search } from "lucide-react";
+import {
+  Menu,
+  X,
+  ShoppingCart,
+  User,
+  LogOut,
+  Settings,
+  Package,
+  Search,
+} from "lucide-react";
 import useAuth from "../hooks/useAuth";
 import useCartService from "../hooks/useCart";
+import logo from "../assets/logo_2.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
-  const { isAuthenticated, isAdmin, logout } = useAuth();
+  const { isAuthenticated, isAdmin, logout, fname } = useAuth();
   const { totalItems } = useCartService();
 
   const navigationLinks = [
@@ -31,13 +41,12 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white shadow-md">
-      {/* Desktop Navigation */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo and primary nav */}
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">TechCart</h1>
+              <img src={logo} alt="TechCart Logo" className="h-8 w-auto" />
             </Link>
 
             <div className="hidden md:ml-6 md:flex md:space-x-8">
@@ -70,7 +79,7 @@ const Navbar = () => {
               />
               <Search
                 onClick={() =>
-                  (window.window.location.href = `/products?search=${searchQuery}`)
+                  (window.location.href = `/products?search=${searchQuery}`)
                 }
                 className="absolute right-3 top-1.5 h-5 w-5 text-gray-400 cursor-pointer"
               />
@@ -91,22 +100,51 @@ const Navbar = () => {
             </button>
 
             {isAuthenticated ? (
-              <div className="relative ml-3 flex items-center space-x-4">
-                {isAdmin && (
-                  <Link
-                    to="/admin"
-                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                  >
-                    Admin Panel
-                  </Link>
-                )}
-                <button
-                  onClick={logout}
-                  className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                >
-                  <LogOut className="h-5 w-5 mr-1" />
-                  Logout
+              <div
+                className="relative group"
+                onMouseEnter={() => setIsOpen(true)}
+                onMouseLeave={() => setIsOpen(false)}
+              >
+                <button className="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-gray-800">
+                  <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                    {fname.toUpperCase().charAt(0)}
+                  </div>
                 </button>
+
+                {/* Dropdown Menu */}
+                {isOpen && (
+                  <div
+                    onMouseEnter={() => setIsOpen(true)}
+                    onMouseLeave={() => setIsOpen(false)}
+                    className="absolute -right-10 mt-0 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 origin-top-right"
+                  >
+                    <div className="py-1">
+                      <Link
+                        to="/myorders"
+                        className="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <Package className="h-5 w-5 mr-2" />
+                        My Orders
+                      </Link>
+                      {isAdmin && (
+                        <Link
+                          to="/admin"
+                          className="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          <Settings className="h-5 w-5 mr-2" />
+                          Admin Panel
+                        </Link>
+                      )}
+                      <button
+                        onClick={logout}
+                        className="flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <LogOut className="h-5 w-5 mr-2" />
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <Link
@@ -156,6 +194,13 @@ const Navbar = () => {
 
             {isAuthenticated ? (
               <>
+                <Link
+                  to="/orders"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                  onClick={() => setIsOpen(false)}
+                >
+                  My Orders
+                </Link>
                 {isAdmin && (
                   <Link
                     to="/admin"

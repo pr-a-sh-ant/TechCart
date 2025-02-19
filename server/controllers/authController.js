@@ -7,9 +7,9 @@ const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 
 exports.register = (req, res) => {
-  const { email, password, isAdmin, fname, lname } = req.body;
+  const { email, password, fname, lname } = req.body;
   authModel
-    .register(email, password, false, fname, lname)
+    .register(email, password, fname, lname)
     .then((result) => {
       res.status(201).send({ status: 201, data: result });
     })

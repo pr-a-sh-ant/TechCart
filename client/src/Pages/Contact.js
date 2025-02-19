@@ -12,7 +12,7 @@ const ContactUs = () => {
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem]">
         {/* Contact Info Section */}
-        <div className="bg-slate-50 shadow-lg rounded-lg p-6">
+        <div className="bg-white shadow-lg rounded-lg p-6">
           <h2 className="text-3xl font-bold text-gray-700 mb-4">
             Get in Touch
           </h2>
@@ -42,7 +42,7 @@ const ContactUs = () => {
         </div>
 
         {/* Contact Form Section */}
-        <div className="bg-slate-50 shadow-lg rounded-lg p-6">
+        <div className="bg-white shadow-lg rounded-lg p-6">
           <h2 className="text-3xl font-bold text-gray-700 mb-4">
             Send Us a Message
           </h2>

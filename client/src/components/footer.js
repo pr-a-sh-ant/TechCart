@@ -1,15 +1,16 @@
 import { Mail, Phone, MapPin } from "lucide-react";
+import logo from "../assets/logo.png";
 
 import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="border-t border-gray-200 px-4 py-10 sm:px-6 lg:px-10 bg-white mt-10">
+    <footer className="border-t border-gray-200 px-4 pt-10 pb-1 sm:px-6 lg:px-10 bg-white">
       <div className="container mx-auto max-w-7xl">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand and Description */}
           <div className="flex flex-col h-full">
-            <h2 className="mb-4 text-2xl font-bold">TechCart</h2>
+            <img src={logo} alt="TechCart Logo" className="mb-4 w-32 h-auto" />
             <p className="text-gray-600 flex-grow">
               TechCart is your go-to destination for the latest electronics.
             </p>
@@ -110,7 +111,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-8 flex items-center justify-center border-t border-gray-200 pt-6 text-center">
+        <div className="mt-2 flex items-center justify-center border-t border-gray-200 pt-2 text-center">
           <p className="text-sm text-gray-500">&copy; 2025 TechCart</p>
         </div>
       </div>

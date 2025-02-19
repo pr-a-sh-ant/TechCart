@@ -8,6 +8,7 @@ const useAuth = () => {
     localStorage.getItem("userId") === null ? false : true;
   const isAdmin = localStorage.getItem("isAdmin") === "1" ? true : false;
   const userId = localStorage.getItem("userId");
+  const fname = localStorage.getItem("fname");
 
   const signIn = (provider, formData) => {
     fetch(`${getBaseURL()}/auth/login`, {
@@ -27,10 +28,12 @@ const useAuth = () => {
         return res.json();
       })
       .then((data) => {
+        console.log(data);
         localStorage.setItem("token", data.result.token);
         localStorage.setItem("refreshToken", data.result.refreshToken);
         localStorage.setItem("userId", data.result.userId);
         localStorage.setItem("isAdmin", data.result.isAdmin);
+        localStorage.setItem("fname", data.result.fname);
         // Fetch cart details after login
         return fetch(`${getBaseURL()}/cart/${data.result.userId}`, {
           method: "GET",
@@ -61,10 +64,11 @@ const useAuth = () => {
     localStorage.removeItem("userId");
     localStorage.removeItem("isAdmin");
     clear();
+    toast.success("Successfully Logged Out");
     window.location.href = "/";
   };
 
-  return { isAuthenticated, isAdmin, logout, userId, signIn };
+  return { isAuthenticated, isAdmin, logout, userId, signIn, fname };
 };
 
 export default useAuth;

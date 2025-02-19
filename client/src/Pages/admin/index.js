@@ -5,7 +5,7 @@ import {
   Users,
   Package,
   ShoppingCart,
-  Settings,
+  LucideHome,
 } from "lucide-react";
 
 const Admin = () => {
@@ -15,7 +15,7 @@ const Admin = () => {
     { path: "/admin/users", label: "Users", icon: Users },
     { path: "/admin/products", label: "Products", icon: Package },
     { path: "/admin/orders", label: "Orders", icon: ShoppingCart },
-    { path: "/admin/settings", label: "Settings", icon: Settings },
+    { path: "/", label: "Home", icon: LucideHome },
   ];
 
   const isActivePath = (path) => {
@@ -23,7 +23,7 @@ const Admin = () => {
   };
 
   return (
-    <div className="min-h-[92vh] flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <div className="flex flex-1">
         {/* Sidebar */}
         <aside

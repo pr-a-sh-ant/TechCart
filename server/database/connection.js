@@ -53,7 +53,6 @@ pool.connect((err) => {
           return;
         }
         console.log("Database 'ecommerce' created");
-
         // Switch to the ecommerce database
         switchToEcommerceDatabase(() => {
           // Execute table creation and foreign key setup ONLY ONCE when the database is first created
