@@ -4,47 +4,113 @@ TechCart Project
 
 ## Description
 
-This project is an E-commerce platform designed to provide users with a convenient and seamless shopping experience. It aims to offer computer related items with ease
+This project is an E-commerce platform designed to provide users with a convenient and seamless shopping experience. It aims to offer computer-related items with ease.
 
 ## Technologies Used
 
-    Frontend:
-        HTML, CSS, JavaScript
-        React.js (frontend library)
-        Tailwind CSS
-    Backend:
-        Node.js
-        Express.js
-        MYSql (database)
-    Authentication:
-        JSON Web Tokens (JWT)
-    Other tools:
-        Git (for version control)
+### Frontend:
+
+- HTML, CSS, JavaScript
+- React.js (frontend library)
+- Tailwind CSS
+
+### Backend:
+
+- Node.js
+- Express.js
+- MySQL (database)
+
+### Authentication:
+
+- JSON Web Tokens (JWT)
+
+### Other tools:
+
+- Git (for version control)
+
+## Setup Instructions
 
 ### Server Setup:
 
-    cd server
+1. Navigate to the server directory:
 
-    npm install
+   ```sh
+   cd server
+   ```
 
-    npm run start
+2. Install the required dependencies:
 
-    npm run debug  // if you want to start node js in debug mode
+   ```sh
+   npm install
+   ```
 
-- make sure you have correct env file configured
+3. Start the server:
+
+   ```sh
+   npm run start
+   ```
+
+4. To start the server in debug mode:
+   ```sh
+   npm run debug
+   ```
+
+- Ensure you have the correct `.env` file configured. Structure of env file is given in readme file of server
 
 ### Client Setup:
 
-    cd client/
+1. Navigate to the client directory:
 
-    npm install
+   ```sh
+   cd client/
+   ```
 
-    npm run start
+2. Install the required dependencies:
 
-- make sure you have correct env file configured
+   ```sh
+   npm install
+   ```
+
+3. Start the client:
+   ```sh
+   npm run start
+   ```
+
+- Ensure you have the correct `.env` file configured.
 
 ### Database Setup:
 
-We are using Mysql in this project.
+We are using MySQL in this project.
 
-In database folder we have createTables.sql use this file to create table in MySQL.
+1. In the `database` folder, the file `createTables.sql` contains detail about all out tables.
+
+2. In server the code in this file is executed
+
+## Folder Structure
+
+```
+├── client/
+│   ├── public/
+│   ├── src/
+│   ├── package.json
+│   └── ...
+├── server/
+│   ├── config/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── package.json
+│   └── ...
+├── database/
+│   ├── createTables.sql
+│   └── ...
+└── README.md
+```
+
+## Important Pages
+
+You can add pictures of some important pages here for better understanding:
+
+![Home Page](path/to/homepage.png)
+![Product Page](path/to/productpage.png)
+![Cart Page](path/to/cartpage.png)

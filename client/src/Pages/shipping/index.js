@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Package, CreditCard, MapPin, ChevronRight, Truck } from "lucide-react";
+import { Package, MapPin, ChevronRight, Truck } from "lucide-react";
 import useCartService from "../../hooks/useCart";
 import useAxios from "../../utils/axios";
 import useAuth from "../../hooks/useAuth";
@@ -65,11 +65,6 @@ const ConfirmOrder = () => {
             <span className="text-blue-600 font-medium flex items-center">
               <MapPin className="h-5 w-5 mr-1" />
               Shipping
-            </span>
-            <ChevronRight className="h-4 w-4 text-gray-500" />
-            <span className="text-gray-400 flex items-center">
-              <CreditCard className="h-5 w-5 mr-1" />
-              Payment
             </span>
           </div>
 

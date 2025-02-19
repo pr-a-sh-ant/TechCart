@@ -57,7 +57,7 @@ const AdminProducts = () => {
     window.location.href = `/admin/addproduct?edit=true&productId=${id}`;
   };
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <Loading fullScreen={false} />;
   if (error) return <ErrorPage />;
 
   return (
@@ -134,7 +134,7 @@ const AdminProducts = () => {
                         {product.productName}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${product.price}
+                        Rs.{product.price}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button

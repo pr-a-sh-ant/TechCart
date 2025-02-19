@@ -6,6 +6,7 @@ import ErrorPage from "../../../components/error";
 import { toast } from "react-hot-toast";
 import useAxios from "../../../utils/axios";
 import { ImagePlus, Loader2 } from "lucide-react";
+import { useEffect } from "react";
 
 const AddProduct = () => {
   const api = useAxios();
@@ -28,24 +29,26 @@ const AddProduct = () => {
     },
   });
 
-  if (isEdit) {
-    fetch(`${getBaseURL()}/products/${productId}`)
-      .then((res) => {
-        if (res.ok) {
-          res.json().then((data) => {
-            setValue("name", data[0].name);
-            setValue("price", data[0].price);
-            setValue("description", data[0].description);
-            setValue("image", data[0].image);
-          });
-        } else {
-          throw new Error("Failed to fetch product data");
-        }
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
-  }
+  useEffect(() => {
+    if (isEdit && productId) {
+      fetch(`${getBaseURL()}/products/${productId}`)
+        .then((res) => {
+          if (res.ok) {
+            res.json().then((data) => {
+              setValue("name", data[0].name);
+              setValue("price", data[0].price);
+              setValue("description", data[0].description);
+              setValue("image", data[0].image);
+            });
+          } else {
+            throw new Error("Failed to fetch product data");
+          }
+        })
+        .catch((err) => {
+          toast.error(err.message);
+        });
+    }
+  }, [isEdit, productId, setValue]);
 
   const {
     isLoading,

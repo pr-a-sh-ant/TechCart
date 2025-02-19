@@ -20,4 +20,11 @@ router.get(
   orderController.getPastOrdersByCustomerID
 );
 
+router.delete(
+  "/delete/:id",
+  authController.protect,
+  authController.restrictTo,
+  orderController.deleteOrder
+);
+
 module.exports = router;

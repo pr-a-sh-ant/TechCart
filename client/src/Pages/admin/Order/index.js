@@ -3,8 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import useAxios from "../../../utils/axios";
 import { ChevronDown, ChevronUp, Package } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const Orders = () => {
+  const queryClient = useQueryClient();
   const api = useAxios();
   const [expandedOrders, setExpandedOrders] = React.useState(new Set());
 
@@ -16,6 +18,17 @@ const Orders = () => {
     },
     onError: () => {
       toast.error("Failed to fetch orders");
+    },
+  });
+
+  const { mutate: delteOrder } = useMutation({
+    mutationFn: async (id) => await api.delete(`/orders/delete/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+      toast.success("Product deleted successfully");
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -84,6 +97,9 @@ const Orders = () => {
                 Total Price
               </th>
               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                Action
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
                 Details
               </th>
             </tr>
@@ -102,7 +118,15 @@ const Orders = () => {
                     {new Date(order.createdDate).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-sm font-medium text-blue-600">
-                    ${Number(order.totalPrice).toFixed(2)}
+                    Rs.{Number(order.totalPrice).toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4">
+                    <button
+                      className="rounded bg-red-100 px-3 py-1 text-sm font-medium text-red-600 transition-colors hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-300 active:bg-red-300"
+                      onClick={() => delteOrder(order.orderId)}
+                    >
+                      Delete
+                    </button>
                   </td>
                   <td className="px-6 py-4">
                     <button

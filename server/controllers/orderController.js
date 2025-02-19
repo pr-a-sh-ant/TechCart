@@ -23,6 +23,19 @@ exports.getPastOrdersByCustomerID = (req, res) => {
     })
     .catch((err) => {
       console.error(err.message);
-      res.status(500).send("Error deleting order.");
+      res.status(500).send("Geeting past orders failed.");
+    });
+};
+
+exports.deleteOrder = (req, res) => {
+  const orderId = req.params.id;
+  orderModel
+    .deleteOrder(orderId)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch((err) => {
+      console.error(err.message);
+      res.status(500).send(err.message);
     });
 };

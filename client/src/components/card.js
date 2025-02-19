@@ -27,7 +27,7 @@ const Card = ({ product, isHome = false }) => {
       className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
     >
       {/* Image container */}
-      <div className={`relative pb-[${isHome ? "100%" : "70%"}]`}>
+      <div className={`relative ${isHome ? "pb-[100%]" : "pb-[70%]"}`}>
         <img
           src={product.image}
           alt={product.name}
