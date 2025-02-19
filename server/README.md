@@ -13,7 +13,7 @@ This document provides an overview of the server setup and configuration for the
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/TechCart.git
+   git clone https://github.com/pr-a-sh-ant/TechCart.git
    ```
 2. Navigate to the server directory:
    ```bash
@@ -47,14 +47,13 @@ Create a `.env` file in the root of the server directory with the following stru
 USE_LOCALHOST=true
 PORT=3001
 
-# Update ABCD with respective values from DB_SERVER_DATABASE
 # You dont need all this variable for local setup and this setup is for hosting in aiven
 DB_SERVER_USER=youdbuser
 DB_SERVER_HOST=yourdbhostlink
 DB_SERVER_PASSWORD=yourdbpassword
 DB_SERVER_DATABASE=yoourdbname
 DB_SERVER_PORT=youdbport
-DB_SERVER_CA = "your certificate inside this invertedcomma"
+DB_SERVER_CA = "your certificate inside this double inverted comma"
 
 # Add config keys as per your app
 JWT_SECRET_KEY_ACCESS_TOKEN=jwtsecret
@@ -91,10 +90,22 @@ CLOUDINARY_SECRET= yourcloudinarysecret
 ### Orders
 
 - `GET /api/orders` - Retrieve a list of all orders (protected and restriced)
-- `GET /api/orders/myPastOrders/:id` - get order of certain user(protected)
+- `GET /api/orders/myPastOrders/:id` - Get order of certain user(protected)
+- `DELETE /api/orders/delete/:id` - Delete a order (protected and restricted)
 
 ### Cart
 
-### Category
+- `GET /api/cart/:userId` - Get detail about user cart (protected)
+- `POST /api/cart/add` - Create a shopping cart for the user (protected)
+- `DELETE api/cart/remove/:productId/:userId` - Delete a product from the usercart and also delete the usercart for the table (protected)
+- `POST api/cart/buy` - Create a order and productInOrder where the data of shopping cart is transfered to the productInOrder and the order is created with that productInOrder and shopping cart is dropped (protected)
+
+### Category \categories
+
+- `GET /api/categories` - Get all the categories
+- `POST /api/categories/create` - Create a new category (protected and restricted)
+- `DELETE /api/categories/delete/:id` - Delete a category (protected and restricted)
 
 ### Token
+
+- `POST /api/token/refreshToken` - Create a new accesss token from refresh token (protected)

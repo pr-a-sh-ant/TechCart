@@ -34,7 +34,6 @@ const useCartService = () => {
       cartStore.setState({ items, totalPrice });
     },
     increase: (item, userId) => {
-      console.log("item", item);
       const exist = items.find((x) => x.productId === item.productId);
 
       const updatedCartItems = exist

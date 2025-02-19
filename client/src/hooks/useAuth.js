@@ -28,7 +28,6 @@ const useAuth = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
         localStorage.setItem("token", data.result.token);
         localStorage.setItem("refreshToken", data.result.refreshToken);
         localStorage.setItem("userId", data.result.userId);

@@ -12,7 +12,6 @@ const AdminUsers = () => {
     queryKey: ["usersData"],
     queryFn: async () => {
       const response = await api.get("/user/getuser");
-      console.log(response.data);
 
       return response.data;
     },

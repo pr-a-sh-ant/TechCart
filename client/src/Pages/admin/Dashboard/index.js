@@ -106,7 +106,6 @@ const AdminDashboard = () => {
   }
 
   if (error) {
-    console.log(error);
     return (
       <div className="flex h-screen items-center justify-center bg-gray-50">
         <div className="text-lg text-red-600">Error loading dashboard data</div>
