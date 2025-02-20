@@ -6,10 +6,13 @@ exports.getAllProducts = (category, search, minPrice, maxPrice) => {
   const query =
     "SELECT p.* FROM product p INNER JOIN category c ON c.categoryID = p.categoryId" +
     (category || search || minPrice || maxPrice ? " WHERE" : "") +
-    (category ? ` c.name = '${category}' AND` : "") +
-    (search ? ` p.name LIKE '%${search}%' AND` : "") +
-    (minPrice ? ` p.price >= ${+minPrice} AND` : "") +
+    (category ? ` c.name = '${category}' ` : "") +
+    (category && minPrice ? " AND" : "") +
+    (minPrice ? ` p.price >= ${+minPrice} ` : "") +
+    (minPrice && maxPrice ? " AND" : "") +
     (maxPrice ? ` p.price <= ${+maxPrice} ` : "") +
+    (maxPrice && search ? " AND" : "") +
+    (search ? ` p.name LIKE '%${search}%' ` : "") +
     ";";
   return new Promise((resolve, reject) => {
     pool.query(query, (err, result) => {
@@ -71,7 +74,8 @@ exports.getAllCategoriesWithProducts = () => {
 
 exports.getProductDetailsById = (productId) => {
   return new Promise((resolve, reject) => {
-    const query = "SELECT * FROM product WHERE productId = ?";
+    const query =
+      "SELECT p.*, c.name as category FROM product as p INNER JOIN category c ON p.categoryId=c.categoryId WHERE p.productId = ?";
     pool.query(query, [productId], (err, result) => {
       if (err) {
         reject(err);

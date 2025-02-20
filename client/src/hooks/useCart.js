@@ -33,20 +33,20 @@ const useCartService = () => {
       const { totalPrice } = calcPrice(items);
       cartStore.setState({ items, totalPrice });
     },
-    increase: (item, userId) => {
+    increase: (item, userId, quantity = 1) => {
       const exist = items.find((x) => x.productId === item.productId);
 
       const updatedCartItems = exist
         ? items.map((x) =>
             x.productId === item.productId
-              ? { ...exist, quantity: exist.quantity + 1 }
+              ? { ...exist, quantity: exist.quantity + quantity }
               : x
           )
-        : [...items, { ...item, quantity: 1 }];
+        : [...items, { ...item, quantity: quantity }];
 
       const { totalPrice } = calcPrice(updatedCartItems);
 
-      updateCart(userId, item.productId, 1, api);
+      updateCart(userId, item.productId, quantity, api);
       cartStore.setState({
         items: updatedCartItems,
         totalPrice,

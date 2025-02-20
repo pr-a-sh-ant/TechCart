@@ -27,7 +27,7 @@ const AddCategory = () => {
     },
     onSuccess: () => {
       toast.success("Category added successfully");
-      window.location.href = "/";
+      window.location.href = "/admin/products";
     },
     onError: (error) => {
       toast.error(error.message);

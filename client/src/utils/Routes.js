@@ -15,6 +15,7 @@ import Register from "../Pages/register";
 import ProtectedRoute from "../utils/protectedRoute";
 import Admin from "../Pages/admin";
 import Cart from "../Pages/Cart";
+import ProductDetail from "../Pages/ProductDetail";
 
 import NotFound from "../Pages/NotFound";
 import AdminUsers from "../Pages/admin/Users";
@@ -63,6 +64,7 @@ const Routers = () => {
         <Route path="contact" element={<ContactUs />} />
         <Route path="categories" element={<Categories />} />
         <Route path="products" element={<Products />} />
+        <Route path="products/:productId" element={<ProductDetail />} />
         <Route path="policy" element={<ShippingPolicy />} />
 
         <Route element={<ProtectedRoute adminRoute={true} />}>

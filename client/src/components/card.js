@@ -21,13 +21,20 @@ const Card = ({ product, isHome = false }) => {
     );
   };
 
+  const onClickHandler = () => {
+    window.location.href = `/products/${product.productId}`;
+  };
+
   return (
     <div
       key={product.id}
       className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
     >
       {/* Image container */}
-      <div className={`relative ${isHome ? "pb-[100%]" : "pb-[70%]"}`}>
+      <div
+        onClick={onClickHandler}
+        className={`relative ${isHome ? "pb-[100%]" : "pb-[70%]"} cursor-pointer`}
+      >
         <img
           src={product.image}
           alt={product.name}
@@ -37,13 +44,13 @@ const Card = ({ product, isHome = false }) => {
 
       {/* Content section with flex-grow to align labels properly */}
       <div className="p-4 flex flex-col flex-grow">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        <h3
+          className="text-lg font-semibold text-gray-900 mb-2 cursor-pointer"
+          onClick={onClickHandler}
+        >
           {product.name}
         </h3>
-        <p className="text-sm text-gray-600 mb-4 flex-grow">
-          {product.description}
-        </p>
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col justify-between">
           <span className="text-lg font-bold text-blue-500">
             Rs. {product.price}
           </span>

@@ -5,11 +5,19 @@ import ErrorPage from "../../../components/error";
 import { getBaseURL } from "../../../apiconfig";
 import { toast } from "react-hot-toast";
 import useAxios from "../../../utils/axios";
-import { Plus, Pencil, Trash, Package } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Trash,
+  Package,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 
 const AdminProducts = () => {
   const queryClient = useQueryClient();
   const api = useAxios();
+  const [expandedCategories, setExpandedCategories] = React.useState(new Set());
 
   const {
     isLoading,
@@ -44,6 +52,18 @@ const AdminProducts = () => {
       toast.error(error.message);
     },
   });
+
+  const toggleCategoryExpansion = (categoryId) => {
+    setExpandedCategories((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(categoryId)) {
+        newSet.delete(categoryId);
+      } else {
+        newSet.add(categoryId);
+      }
+      return newSet;
+    });
+  };
 
   const navigateToAddProduct = () => {
     window.location.href = "/admin/addproduct";
@@ -102,63 +122,81 @@ const AdminProducts = () => {
                   {category?.products?.length || 0} products
                 </span>
               </div>
-              <button
-                onClick={() => delteCategory(category.categoryID)}
-                disabled={category?.products?.length > 0}
-                className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:bg-gray-300 disabled:cursor-not-allowed"
-              >
-                <Trash className="h-4 w-4 mr-1" />
-                Delete
-              </button>
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => toggleCategoryExpansion(category.categoryID)}
+                  className="flex items-center text-sm text-blue-600 hover:text-blue-800"
+                >
+                  {expandedCategories.has(category.categoryID) ? (
+                    <>
+                      Hide <ChevronUp className="ml-1 h-4 w-4" />
+                    </>
+                  ) : (
+                    <>
+                      Show <ChevronDown className="ml-1 h-4 w-4" />
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={() => delteCategory(category.categoryID)}
+                  disabled={category?.products?.length > 0}
+                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  <Trash className="h-4 w-4 mr-1" />
+                  Delete
+                </button>
+              </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Product Name
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Price
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {category?.products?.map((product) => (
-                    <tr key={product.productId} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {product.productName}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Rs.{product.price}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button
-                          onClick={() =>
-                            navigateToEditCategory(product.productId)
-                          }
-                          className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-2"
-                        >
-                          <Pencil className="h-4 w-4 mr-1" />
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => delteProduct(product.productId)}
-                          className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                        >
-                          <Trash className="h-4 w-4 mr-1" />
-                          Delete
-                        </button>
-                      </td>
+            {expandedCategories.has(category.categoryID) && (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Product Name
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Price
+                      </th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {category?.products?.map((product) => (
+                      <tr key={product.productId} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {product.productName}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          Rs.{product.price}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <button
+                            onClick={() =>
+                              navigateToEditCategory(product.productId)
+                            }
+                            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-2"
+                          >
+                            <Pencil className="h-4 w-4 mr-1" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => delteProduct(product.productId)}
+                            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                          >
+                            <Trash className="h-4 w-4 mr-1" />
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         ))}
       </div>

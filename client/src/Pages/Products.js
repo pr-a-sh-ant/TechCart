@@ -47,6 +47,8 @@ const Products = () => {
     },
   });
 
+  console.log(products);
+
   const { data: categories, isLoading: isLoadingCategories } = useQuery({
     queryKey: ["categories"],
     queryFn: () =>
