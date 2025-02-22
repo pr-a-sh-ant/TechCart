@@ -9,7 +9,6 @@ exports.getAllOrders = (req, res) => {
       res.status(200).send(result);
     })
     .catch((err) => {
-      console.error(err.message);
       res.status(500).send("Error fetching orders.");
     });
 };
@@ -22,7 +21,6 @@ exports.getPastOrdersByCustomerID = (req, res) => {
       res.send(result);
     })
     .catch((err) => {
-      console.error(err.message);
       res.status(500).send("Geeting past orders failed.");
     });
 };

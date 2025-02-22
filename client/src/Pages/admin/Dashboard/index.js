@@ -13,6 +13,7 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+import ErrorPage from "../../../components/error";
 
 const AdminDashboard = () => {
   const api = useAxios();
@@ -113,7 +114,7 @@ const AdminDashboard = () => {
     );
   }
 
-  if (!dashboardData) return null;
+  if (!dashboardData) return <ErrorPage message="No data found" />;
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">

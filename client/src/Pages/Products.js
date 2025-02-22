@@ -4,6 +4,8 @@ import { useSearchParams } from "react-router-dom";
 import { Range } from "react-range";
 import { getBaseURL } from "../apiconfig";
 import Card from "../components/card";
+import Loading from "../components/loading";
+import ErrorPage from "../components/error";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -97,14 +99,9 @@ const Products = () => {
   }, [filters, priceRange, setSearchParams]);
 
   if (isLoadingProducts || isLoadingCategories)
-    return <div className="text-center text-xl">Loading...</div>;
+    return <Loading variant="dots" size="large" fullScreen={true} />;
 
-  if (productsError)
-    return (
-      <div className="text-center text-xl text-red-500">
-        Error loading products
-      </div>
-    );
+  if (productsError) return <ErrorPage message={productsError} />;
 
   return (
     <div className="container mx-auto p-6">

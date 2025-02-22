@@ -5,20 +5,15 @@ const router = express.Router();
 const authController = require("../controllers/authController");
 const cloudinary = require("cloudinary");
 
-router.post(
-  "/",
-  authController.protect,
-  authController.restrictTo,
-  (req, res) => {
-    const timestamp = Math.round(new Date().getTime() / 1000);
-    const signature = cloudinary.utils.api_sign_request(
-      {
-        timestamp: timestamp,
-      },
-      process.env.CLOUDINARY_SECRET
-    );
-    return res.status(201).send({ statusId: 201, timestamp, signature });
-  }
-);
+router.post("/", (req, res) => {
+  const timestamp = Math.round(new Date().getTime() / 1000);
+  const signature = cloudinary.utils.api_sign_request(
+    {
+      timestamp: timestamp,
+    },
+    process.env.CLOUDINARY_SECRET
+  );
+  return res.status(201).send({ statusId: 201, timestamp, signature });
+});
 
 module.exports = router;

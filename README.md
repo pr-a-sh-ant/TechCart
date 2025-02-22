@@ -10,15 +10,30 @@ This project is an E-commerce platform designed to provide users with a convenie
 
 ### Frontend:
 
+```
+Hosted at: https://tech-cart-rust.vercel.app/
+```
+
 - HTML, CSS, JavaScript
 - React.js (frontend library)
 - Tailwind CSS
 
 ### Backend:
 
+```
+Hosted at: https://techcart-7pz5.onrender.com
+```
+
 - Node.js
 - Express.js
-- MySQL (database)
+
+### Databse:
+
+```
+Hosted at: Aiven
+```
+
+- MySQL
 
 ### Authentication:
 

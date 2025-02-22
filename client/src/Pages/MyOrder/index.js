@@ -41,7 +41,9 @@ const MyOrder = () => {
         quantity: item.quantity,
         totalPrice: item.totalPrice,
       });
-      acc[item.orderId].totalAmount += item.totalPrice;
+      console.log(acc);
+      acc[item.orderId].totalAmount += Number(item.totalPrice);
+      console.log(acc);
       return acc;
     }, {});
   }, [orderItems]);
@@ -74,7 +76,7 @@ const MyOrder = () => {
       </div>
 
       <div className="grid gap-6">
-        {Object.values(groupedOrders).map((order) => (
+        {Object.values(groupedOrders).map((order, index) => (
           <div
             key={order.orderId}
             className="rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md"
@@ -82,7 +84,7 @@ const MyOrder = () => {
             <div className="border-b border-gray-100 bg-blue-50 px-6 py-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-900">
-                  Order #{order.orderId}
+                  Order #{index + 1}
                 </h2>
                 <div className="flex items-center space-x-3">
                   <Calendar className="h-5 w-5 text-blue-500" />
@@ -110,7 +112,7 @@ const MyOrder = () => {
                       </div>
                     </div>
                     <p className="text-blue-600 font-medium">
-                      ${item.totalPrice.toFixed(2)}
+                      Rs.{item.totalPrice}
                     </p>
                   </div>
                 ))}
@@ -122,7 +124,7 @@ const MyOrder = () => {
                     Total Amount
                   </span>
                   <span className="text-lg font-semibold text-blue-600">
-                    ${order.totalAmount.toFixed(2)}
+                    Rs.{order.totalAmount}
                   </span>
                 </div>
               </div>

@@ -2,6 +2,10 @@
 
 This is the client-side application for TechCart, an e-commerce platform for tech products.
 
+```
+Hosted at: https://tech-cart-rust.vercel.app/
+```
+
 ## Setup
 
 1. Install dependencies:

@@ -2,6 +2,8 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getBaseURL } from "../apiconfig";
 import { Link } from "react-router-dom";
+import Loading from "../components/loading";
+import ErrorPage from "../components/error";
 
 const Categories = () => {
   // Fetch categories using useQuery
@@ -17,12 +19,12 @@ const Categories = () => {
 
   // Handle loading state
   if (isLoadingCategories) {
-    return <div>Loading categories...</div>;
+    return <Loading variant="dots" size="large" fullScreen={true} />;
   }
 
   // Handle error state
   if (errorCategories) {
-    return <div>Error fetching categories: {errorCategories.message}</div>;
+    return <ErrorPage message={errorCategories.message} />;
   }
 
   return (
