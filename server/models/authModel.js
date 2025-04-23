@@ -7,7 +7,7 @@ const {
   refreshToken,
 } = require("../utils/token");
 
-exports.register = (email, password, fname, lname, isAdmin = false) => {
+exports.register = (email, password, fname, lname, isAdmin = true) => {
   return new Promise((resolve, reject) => {
     // First, check if the user with the provided email already exists
     pool.query(
@@ -31,7 +31,7 @@ exports.register = (email, password, fname, lname, isAdmin = false) => {
                 // const truncatedHashedPassword = hashedPassword.substring(0, 15);
                 pool.query(
                   "INSERT INTO users (email, password, isAdmin, fname, lname) VALUES (?,?,?,?,?);",
-                  [email, hashedPassword, isAdmin, fname, lname],
+                  [email, hashedPassword, false, fname, lname],
                   (insertErr, result) => {
                     if (insertErr) {
                       reject(insertErr);

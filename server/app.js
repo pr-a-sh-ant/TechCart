@@ -9,6 +9,7 @@ const userToken = require("./routes/userTokenRoute");
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const cloudinarySign = require("./routes/cloudinarySign");
+const khaltiRoutes = require("./routes/khaltiPayment");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/token", userToken);
 app.use("/api/user", userRoutes);
 app.use("/api/cloudinary-sign", cloudinarySign);
+app.use("/api/payments/process/khalti", khaltiRoutes);
 
 const PORT = process.env.PORT || 3001;
 

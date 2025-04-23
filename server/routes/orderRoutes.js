@@ -20,6 +20,26 @@ router.get(
   orderController.getPastOrdersByCustomerID
 );
 
+router.patch(
+  "/updateOrderStatus/:id",
+  authController.protect,
+  authController.restrictTo,
+  orderController.updateOrderStatus
+);
+
+router.patch(
+  "/cancelOrder/:id",
+  authController.protect,
+  orderController.cancelOrder
+);
+
+router.patch(
+  "/paidOrder/:id",
+  authController.protect,
+  authController.restrictTo,
+  orderController.paidOrder
+);
+
 router.delete(
   "/delete/:id",
   authController.protect,

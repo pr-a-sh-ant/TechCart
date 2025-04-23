@@ -1,7 +1,6 @@
 // cartController.js
 
 const cartModel = require("../models/cartModel");
-const { verifyToken } = require("../utils/token");
 
 exports.getShoppingCart = (req, res) => {
   const userId = req.params.userId;
@@ -47,9 +46,23 @@ exports.buy = (req, res) => {
   const customerId = req.params.id;
   const address = req.body.address;
   const phoneNumber = req.body.phoneNumber;
+  const status = req.body.status;
+  const paymentMethod = req.body.paymentMethod;
+  const transactionId = req.body.transactionID;
+  const paymentStatus = req.body.paymentStatus;
+
+  console.log(transactionId);
 
   cartModel
-    .buy(customerId, address, phoneNumber)
+    .buy(
+      customerId,
+      address,
+      phoneNumber,
+      status,
+      paymentMethod,
+      transactionId,
+      paymentStatus
+    )
     .then((result) => {
       res.send(result);
     })

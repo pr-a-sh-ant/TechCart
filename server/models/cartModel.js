@@ -75,12 +75,28 @@ exports.removeFromCart = (productId, userId) => {
   });
 };
 
-exports.buy = (customerId, address, phoneNumber) => {
+exports.buy = (
+  customerId,
+  address,
+  phoneNumber,
+  status,
+  paymentMethod,
+  transactionId,
+  paymentStatus
+) => {
   return new Promise((resolve, reject) => {
     // Create order
     pool.query(
-      "INSERT INTO orders (userId, address, phoneNumber) VALUES (?, ?, ?);",
-      [customerId, address, phoneNumber],
+      "INSERT INTO orders (userId, address, phoneNumber, status, paymentMethod, transactionId, paymentStatus) VALUES (?, ?, ?, ?, ?, ? , ?);",
+      [
+        customerId,
+        address,
+        phoneNumber,
+        status,
+        paymentMethod,
+        transactionId,
+        paymentStatus,
+      ],
       (err, orderResult) => {
         if (err) {
           reject(err);

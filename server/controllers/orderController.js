@@ -14,14 +14,53 @@ exports.getAllOrders = (req, res) => {
 };
 
 exports.getPastOrdersByCustomerID = (req, res) => {
-  const orderId = req.params.id;
+  const userId = req.params.id;
   orderModel
-    .getPastOrdersByCustomerID(orderId)
+    .getPastOrdersByCustomerID(userId)
     .then((result) => {
       res.send(result);
     })
     .catch((err) => {
       res.status(500).send("Geeting past orders failed.");
+    });
+};
+
+exports.updateOrderStatus = (req, res) => {
+  const orderId = req.params.id;
+  orderModel
+    .updateOrderStatus(orderId)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch((err) => {
+      console.error(err.message);
+      res.status(500).send(err.message);
+    });
+};
+
+exports.cancelOrder = (req, res) => {
+  const orderId = req.params.id;
+  orderModel
+    .cancelOrder(orderId)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch((err) => {
+      console.error(err.message);
+      res.status(500).send(err.message);
+    });
+};
+
+exports.paidOrder = (req, res) => {
+  const orderId = req.params.id;
+  orderModel
+    .paidOrder(orderId)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch((err) => {
+      console.error(err.message);
+      res.status(500).send(err.message);
     });
 };
 

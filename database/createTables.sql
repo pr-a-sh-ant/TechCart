@@ -30,6 +30,10 @@ CREATE TABLE orders (
     userId INT(5),
     address VARCHAR(500),
     totalPrice DECIMAL(10,2),
+    status ENUM('pending', 'delivered', 'cancelled') DEFAULT 'pending',
+    paymentMethod ENUM('creditCard', 'khalti', 'cashOnDelivery') DEFAULT 'cashOnDelivery',
+    transactionId VARCHAR(100),
+    paymentStatus ENUM('pending', 'completed') DEFAULT 'pending',
     createdDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -38,6 +42,8 @@ CREATE TABLE productsInOrder (
     productId INT(5),
     quantity INT,
     totalPrice DECIMAL(10,2),
+    paid BOOLEAN DEFAULT FALSE,
+    status ENUM('pending', 'delivered', 'cancelled') DEFAULT 'pending',
     PRIMARY KEY (orderId, productId) 
 );
 

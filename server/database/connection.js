@@ -118,6 +118,10 @@ function createTablesAndForeignKeys() {
       userId INT(5),
       address VARCHAR(500),
       phoneNumber BIGINT(10),
+      status ENUM('pending', 'delivered', 'cancelled') DEFAULT 'pending',
+      paymentMethod ENUM('creditCard', 'khalti', 'cashOnDelivery') DEFAULT 'cashOnDelivery',
+      transactionId VARCHAR(100),
+      paymentStatus ENUM('pending','completed') DEFAULT 'pending',
       totalPrice DECIMAL(10,2),
       createdDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )`,
