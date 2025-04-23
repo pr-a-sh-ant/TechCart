@@ -16,8 +16,8 @@ router.post("/", authController.protect, (req, res) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      return_url: "http://localhost:3000/confirmation",
-      website_url: "http://localhost:3000/",
+      return_url: "https://tech-cart-nu.vercel.app//confirmation",
+      website_url: "https://tech-cart-nu.vercel.app/",
       amount: amount * 100,
       purchase_order_id,
       purchase_order_name,
