@@ -27,13 +27,20 @@ import AdminDashboard from "../Pages/admin/Dashboard/index.js";
 import Orders from "../Pages/admin/Order/index.js";
 import MyOrder from "../Pages/MyOrder/index.js";
 import Footer from "../components/footer.js";
+import PaymentPage from "../Pages/payment/index.js";
+import Confirmation from "../Pages/confirmation/index.js";
 
 const Routers = () => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 
   // List of routes where Navbar and Footer should not appear
-  const noNavbarFooterRoutes = ["/login", "/register", "/admin"];
+  const noNavbarFooterRoutes = [
+    "/login",
+    "/register",
+    "/admin",
+    "/confirmation",
+  ];
   const shouldShowNavbarFooter = !noNavbarFooterRoutes.some((route) =>
     location.pathname.startsWith(route)
   );
@@ -58,6 +65,8 @@ const Routers = () => {
           <Route path="/myorders" element={<MyOrder />} />
           <Route path="/shoppingCart" element={<Cart />} />
           <Route path="/shipping" element={<ConfirmOrder />} />
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/confirmation" element={<Confirmation />} />
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="about" element={<About />} />

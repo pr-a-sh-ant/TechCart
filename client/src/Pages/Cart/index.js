@@ -8,6 +8,7 @@ import {
   Package,
   MapPin,
   ChevronRight,
+  CreditCard,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import useCartService from "../../hooks/useCart";
@@ -110,6 +111,11 @@ const Cart = () => {
           <span className="text-gray-400 font-medium flex items-center">
             <MapPin className="h-5 w-5 mr-1" />
             Shipping
+          </span>
+          <ChevronRight className="h-4 w-4 text-gray-500" />
+          <span className="text-gray-500 font-medium flex items-center">
+            <CreditCard className="h-5 w-5 mr-1" />
+            Payment
           </span>
         </div>
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Shopping Cart</h1>

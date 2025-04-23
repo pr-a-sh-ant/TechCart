@@ -43,6 +43,7 @@ const AdminDashboard = () => {
           customerName: `${item.fname} ${item.lname}`,
           createdDate: item.createdDate,
           totalPrice: parseFloat(item.totalPrice),
+          paymentStatus: item.paymentStatus, // Added paymentStatus
           products: [],
         };
       }
@@ -64,14 +65,20 @@ const AdminDashboard = () => {
     const uniqueCustomers = new Set(orders.map((order) => order.customerName))
       .size;
 
-    // Daily sales data
+    // Daily sales data - ONLY INCLUDING PAID ORDERS
     const salesByDate = orders.reduce((acc, order) => {
-      const date = new Date(order.createdDate).toLocaleDateString();
-      if (!acc[date]) {
-        acc[date] = { date, revenue: 0, orders: 0 };
+      // Check if payment status is completed
+      if (
+        order.paymentStatus &&
+        order.paymentStatus.toLowerCase() === "completed"
+      ) {
+        const date = new Date(order.createdDate).toLocaleDateString();
+        if (!acc[date]) {
+          acc[date] = { date, revenue: 0, orders: 0 };
+        }
+        acc[date].revenue += order.totalPrice;
+        acc[date].orders += 1;
       }
-      acc[date].revenue += order.totalPrice;
-      acc[date].orders += 1;
       return acc;
     }, {});
 
@@ -187,7 +194,7 @@ const AdminDashboard = () => {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="rounded-lg bg-white p-6 shadow-sm">
             <h2 className="mb-4 text-lg font-semibold text-gray-900">
-              Revenue Trend
+              Revenue Trend (Paid Orders Only)
             </h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">

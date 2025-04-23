@@ -5,6 +5,7 @@ import useAxios from "../utils/axios";
 const initialState = {
   items: [],
   totalPrice: 0,
+  shippingData: {},
 };
 
 export const cartStore = create()(
@@ -23,10 +24,11 @@ const updateCart = (userId, productId, quantity, api) => {
 
 const useCartService = () => {
   const api = useAxios();
-  const { items, totalPrice } = cartStore();
+  const { items, shippingData, totalPrice } = cartStore();
 
   return {
     items,
+    shippingData,
     totalPrice,
     totalItems: items.reduce((acc, item) => acc + item.quantity, 0),
     setItems: (items) => {
@@ -85,10 +87,14 @@ const useCartService = () => {
         totalPrice,
       });
     },
+    setShippingData: (shippingData) => {
+      cartStore.setState({ shippingData });
+    },
     clear: () => {
       cartStore.setState({
         items: [],
         totalPrice: 0,
+        // shippingData: {},
       });
     },
     init: () => cartStore.setState(initialState),

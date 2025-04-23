@@ -1,16 +1,16 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Package, MapPin, ChevronRight, Truck } from "lucide-react";
+import { Package, MapPin, ChevronRight, Truck, CreditCard } from "lucide-react";
 import useCartService from "../../hooks/useCart";
-import useAxios from "../../utils/axios";
-import useAuth from "../../hooks/useAuth";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
 
 const ConfirmOrder = () => {
-  const { items: orderItems, totalPrice, clear } = useCartService();
-  const { userId } = useAuth();
-  const api = useAxios();
+  const {
+    items: orderItems,
+    totalPrice,
+
+    setShippingData,
+  } = useCartService();
+
   // Sample order data - in real app would come from cart/state
 
   const {
@@ -23,6 +23,7 @@ const ConfirmOrder = () => {
       fullName: "",
       phone: "",
       address: "",
+      email: "",
     },
   });
 
@@ -30,25 +31,11 @@ const ConfirmOrder = () => {
   const tax = totalPrice * 0.1;
   const total = totalPrice + shipping + tax;
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: (data) =>
-      api.post(`/cart/buy/${userId}`, {
-        phoneNumber: +`${data.phone}`,
-        address: data.address,
-      }),
-    onSuccess: () => {
-      reset();
-      clear();
-      toast.success("Order placed successfully!");
-      window.location.href = "/";
-      // You could add navigation here, e.g.:
-      // router.push('/payment');
-    },
-  });
-
   const onSubmit = (data) => {
     // Handle order submission
-    mutate(data);
+    setShippingData(data);
+    reset();
+    window.location.href = "/payment";
   };
 
   return (
@@ -65,6 +52,11 @@ const ConfirmOrder = () => {
             <span className="text-blue-600 font-medium flex items-center">
               <MapPin className="h-5 w-5 mr-1" />
               Shipping
+            </span>
+            <ChevronRight className="h-4 w-4 text-gray-500" />
+            <span className="text-gray-600 font-medium flex items-center">
+              <CreditCard className="h-5 w-5 mr-1" />
+              Payment
             </span>
           </div>
 
@@ -174,6 +166,28 @@ const ConfirmOrder = () => {
                       </p>
                     )}
                   </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Email Address
+                    </label>
+                    <input
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                          message: "Please enter a valid email address",
+                        },
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="example@example.com"
+                    />
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.email.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -210,11 +224,10 @@ const ConfirmOrder = () => {
               {/* Submit Button */}
               <div className="mt-6">
                 <button
-                  disabled={isPending}
                   type="submit"
                   className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center"
                 >
-                  Confirm Order
+                  Payment
                   <ChevronRight className="ml-2 h-4 w-4" />
                 </button>
               </div>
